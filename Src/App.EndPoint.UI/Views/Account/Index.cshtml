@@ -1,0 +1,83 @@
+﻿@* @model List<UserViewModel>
+@{
+    ViewData["Title"] = "لیست کاربران";
+    int row = 1;
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>لیست کاربران</h2>
+
+    <a asp-area="Admin" asp-controller="UserManager" asp-action="Create" class="btn btn-icon-split btn-primary btn-lg">
+        افزودن ‌کاربر جدید+
+    </a>
+</div>
+<div class="mb-3">
+    <form asp-area="Admin" asp-controller="UserManager" asp-action="Search" method="get">
+
+        <input type="text" name="name" class="form-control" placeholder="نام کاربر را وارد کنید" />
+        <button type="submit" class="btn btn-primary btn-lg">جستجو</button>
+   </form>
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">لیست کاربران</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th scope="col">ردیف</th>
+                        <th scope="col">شتاسه</th>
+                        <th scope="col">تام</th>
+                        <th scope="col">شماره تماس</th>
+                        <th scope="col">ایمیل</th>
+                        <th>نقش‌های کاربر</th>
+                        <th scope="col">عملیات</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th scope="col">ردیف</th>
+                        <th scope="col">شتاسه</th>
+                        <th scope="col">تام</th>
+                        <th scope="col">شماره تماس</th>
+                        <th scope="col">ایمیل</th>
+                        <th>نقش‌های کاربر</th>
+                        <th scope="col">عملیات</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@row</td>
+                            <td>@item.Id</td>
+                            <td>@item.Name</td>
+                            <td>@item.PhoneNumber</td>
+                            <td>@item.Email</td>
+                            <td>
+                                @string.Join("، ", item.Roles)
+                            </td>
+
+                            <td>
+                                <a asp-area="Admin" asp-controller="UserManager" asp-action="Update" asp-route-id="@item.Id" class="btn  btn-danger "> ویرایش </a>
+                                <a asp-area="Admin" asp-controller="UserManager" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info"> جزئیات </a>
+                                <form asp-area="Admin" asp-controller="UserManager" asp-action="Delete" 
+                                asp-route-id="@item.Id" method="post" onsubmit="return confirm('آیا از حذف این کاربر مطمئن هستید؟');">
+                                    <button type="submit" class=" btn btn-danger" value="حذف"></button>
+                                </form>
+                                <a asp-area="Admin" asp-controller="UserManager" asp-action="ChangePassword" asp-route-id="@item.Id" class="btn btn-warning"> تغییر رمز عبور </a>
+
+                            </td>
+                        </tr>
+                        row++;
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+ *@

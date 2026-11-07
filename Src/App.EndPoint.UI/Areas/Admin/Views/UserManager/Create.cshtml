@@ -1,0 +1,48 @@
+﻿@model UserViewModel
+<h2 class="mb-3 text-center text-bg-success p-3 ">
+    اضافه کردن کاربر جدید
+</h2>
+<form asp-area="Admin" asp-controller="UserManager" asp-action="Create" method="post" enctype="multipart/form-data">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Name">  </label>
+        <input type="text" class="form-control" asp-for="Name" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Email">  </label>
+        <input type="email" class="form-control" asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="PhoneNumber">  </label>
+        <input type="tel" class="form-control" asp-for="PhoneNumber" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+   
+    <div class="mb-3">
+        <label asp-for="Role" class="form-label"></label>
+        <select class="form-select" asp-for="Role" multiple>  
+        @foreach(var item in ViewBag.Roles)
+            {
+            <option value="@item.Name">@item.Name</option>
+            }
+        </select>
+       
+        <span asp-validation-for="Role" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="File">تصاویر و فیلم محصول</label>
+        <input type="file" class="form-control" asp-for="File" accept="image/*" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="DiscriptionFile">توضیحات مربوط به عکس</label>
+        <input type="text" class="form-control" asp-for="DiscriptionFile" />
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success"> ذخیره</button>
+        <a class="btn btn-primary " asp-area="Admin" asp-controller="UserManager" asp-action="Index"><i class="fas fa-arrow-right"></i>بازگشت</a>
+    </div>
+</form>

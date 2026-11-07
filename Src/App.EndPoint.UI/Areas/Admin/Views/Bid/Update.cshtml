@@ -1,0 +1,38 @@
+﻿
+
+    @model BidOutPutViewModel
+<h2 class="mb-3 text-center text-bg-success p-3 ">
+    ویرایش  پیشنهاد @Model.Id
+</h2>
+<form asp-area="Admin" asp-controller="Bid" asp-action="Update" asp-route-id="@Model.Id" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="SuggestedPrice">  </label>
+        <input type="text" class="form-control" asp-for="SuggestedPrice" />
+        <span asp-validation-for="SuggestedPrice" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="ExpertUserName">  </label>
+        <input type="text" class="form-control" asp-for="ExpertUserName" />
+        <span asp-validation-for="ExpertUserName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="ProposalStatus">  </label>
+        <select class="form-select" asp-for="ProposalStatus">
+
+            @foreach (var item in ViewBag.ProposalStatus)
+            {
+                    <option value="@item.Name">@item.Name</option>
+            }
+        </select>
+
+        <span asp-validation-for="ProposalStatus" class="text-danger"></span>
+    </div>
+   
+   
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success"> ذخیره</button>
+        <a class="btn btn-primary " asp-area="Admin" asp-controller="Bid" asp-action="Index"><i class="fas fa-arrow-right"></i>بازگشت</a>
+    </div>
+</form>

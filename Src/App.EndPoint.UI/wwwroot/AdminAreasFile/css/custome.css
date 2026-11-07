@@ -1,0 +1,26 @@
+﻿*, p, div, a, ul, li, span {
+    font-family: 'Vazir','Segoe UI';
+}
+html,body{
+    direction:rtl !important
+}
+
+.navbar-nav {
+    direction: ltr !important;
+    margin-right: 0 !important;
+    margin-left: auto !important;
+    flex: content;
+ 
+}
+
+@font-face {
+    font-family: Vazir !important;
+    src: url('../Fonts/Vazir.ttf') format('truetype');
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Vazir' !important;
+    src: url('../Fonts/Vazir-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}

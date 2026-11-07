@@ -1,0 +1,60 @@
+﻿@using App.EndPoint.UI.Models.Account
+@model UserLoginViewModel
+@{
+    ViewData["Title"] = "ورود";
+}
+<div class="row justify-content-center">
+
+    <div class="col-xl-10 col-lg-12 col-md-9">
+
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <img class="col-lg-6 d-none d-lg-block" src="~/img/Login.jpg"></img>
+                    <div class="col-lg-6">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">خوش آمدید!</h1>
+                            </div>
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <form class="user" asp-controller="Account" asp-action="LogIn" method="post">
+                                <input hidden name="ReturnUrl" value="@ViewBag.ReturnUrl" />
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" asp-for=UserName placeholder="نام کاربری خود را وارد کنید...">
+                                    <span asp-validation-for=UserName class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-user" asp-for=Password placeholder="رمز عبور خود را وارد کنید...">
+                                    <span asp-validation-for=Password class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox small">
+                                        <input type="checkbox" class="custom-control-input" asp-for=RememberMe>
+                                        <label class="custom-control-label" for="customCheck">
+                                            مرا به خاطر بسپار
+                                        </label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-user btn-block">
+                                    ورود
+                                </button>
+                               
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="">رمز عبور را فراموش کرده اید؟</a>
+                            </div>
+                            <div class="text-center">
+                                <a class="btn btn-primary" asp-controller="Account" asp-action="ExpertRegister"> ایجاد حساب کاربری متخصص </a>
+                                <a class="btn btn-primary" asp-controller="Account" asp-action="CustomerRegister"> ایجاد حساب کاربری مشتری </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

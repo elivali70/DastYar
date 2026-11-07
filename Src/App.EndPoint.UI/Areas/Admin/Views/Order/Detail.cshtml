@@ -1,0 +1,45 @@
+﻿@model OrderOutPutViewModel
+<h2 class="mb-3 text-center text-bg-success p-3 ">
+ مشاهده سفارش با شناسه @Model.Id
+</h2>
+<form >
+    <div class="mb-3">
+        <label class="form-label" asp-for="Id">  </label>
+        <input type="number" class="form-control" value=@Model.Id readonly="readonly" />
+    </div>
+  
+    <div class="mb-3">
+        <label class="form-label" asp-for="CustomerUserName">  </label>
+        <input type="number" class="form-control" value=@Model.CustomerUserName  readonly="readonly"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="ExpertUserName">  </label>
+        <input type="text" class="form-control" value=@Model.ExpertUserName readonly="readonly" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="ServiceName">  </label>
+        <input type="datetime" class="form-control" value=@Model.ServiceName readonly="readonly" />
+    </div>
+   
+    <div class="mb-3">
+        <label class="form-label" asp-for="OrderStatus">  </label>
+        <input type="datetime" class="form-control" value=@Model.OrderStatus readonly="readonly" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Discription">  </label>
+        <input type="text" class="form-control" value=@Model.Discription readonly="readonly" />
+    </div>
+  
+    <div class="mb-3">
+        <label class="form-label" asp-for="PrefferedDateTime">  </label>
+        <input type="datetime" class="form-control" value=@Model.PrefferedDateTime readonly="readonly" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="BasePrice">  </label>
+        <input type="number" class="form-control" value=@Model.BasePrice readonly="readonly" />
+    </div>
+   
+    <div class="mb-3">
+        <a class="btn btn-primary " asp-area="Admin" asp-controller="Order" asp-action="Index"><i class="fas fa-arrow-right"></i>بازگشت</a>
+    </div>
+</form>

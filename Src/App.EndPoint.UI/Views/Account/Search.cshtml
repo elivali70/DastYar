@@ -1,0 +1,66 @@
+﻿@* @model List<UserViewModel>
+@{
+    ViewData["Title"] = " نتیجه جستجو";
+    int row = 1;
+}
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-warning">
+        @ViewBag.Message
+    </div>
+}
+else
+{
+    
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">لیست کاربران</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th scope="col">ردیف</th>
+                            <th scope="col">شتاسه</th>
+                            <th scope="col">تام</th>
+                            <th scope="col">شماره تماس</th>
+                            <th scope="col">ایمیل</th>
+                          
+                        </tr>
+                    </thead>
+                   
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@row</td>
+                                <td>@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@item.Email</td>
+
+                            </tr>
+                            row++;
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="UserManager" asp-action="Index"><i class="fas fa-arrow-right"></i>بازگشت</a>
+    </div>
+}
+
+
+
+
+
+
+ *@

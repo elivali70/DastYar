@@ -1,0 +1,64 @@
+﻿@model OrderInPutViewModel
+<h2 class="mb-3 text-center text-bg-success p-3 ">
+  ایجاد سفارش جدید
+</h2>
+<form asp-area="Admin" asp-controller="Order" asp-action="Create" method="post" enctype="multipart/form-data">
+  
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="CustomerPhoneNumber">  </label>
+        <input type="number" class="form-control" asp-for="CustomerPhoneNumber" />
+        <span asp-validation-for="CustomerPhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="ExpertUserName">  </label>
+        <input type="text" class="form-control" asp-for="ExpertUserName" />
+        <span asp-validation-for="ExpertUserName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="ServiceName">  </label>
+        <input type="datetime" class="form-control" asp-for="ServiceName" />
+        <span asp-validation-for="ServiceName" class="text-danger"></span>
+    </div>
+   
+    <div class="mb-3">
+        <label class="form-label" asp-for="OrderStatus">  </label>
+        <select class="form-select" asp-for="OrderStatus">
+
+            @foreach (var item in ViewBag.OrderStatus)
+            {
+                    <option value="@item.Name">@item.Name</option>
+            }
+        </select>
+
+        <span asp-validation-for="OrderStatus" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Discription">  </label>
+        <input type="text" class="form-control" asp-for="Discription" />
+        <span asp-validation-for="Discription" class="text-danger"></span>
+    </div>
+  
+    <div class="mb-3">
+        <label class="form-label" asp-for="PrefferedDateTime">  </label>
+        <input type="datetime" class="form-control" asp-for="PrefferedDateTime" />
+        <span asp-validation-for="PrefferedDateTime" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="BasePrice">  </label>
+        <input type="number" class="form-control" asp-for="BasePrice" />
+        <span asp-validation-for="BasePrice" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="File">تصاویر  </label>
+        <input type="file" class="form-control" asp-for="File" accept="image/*" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="DiscriptionFile">توضیحات مربوط به عکس</label>
+        <input type="text" class="form-control" asp-for="DiscriptionFile" />
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success"> ذخیره</button>
+        <a class="btn btn-primary " asp-area="Admin" asp-controller="Order" asp-action="Index"><i class="fas fa-arrow-right"></i>بازگشت</a>
+    </div>
+</form>

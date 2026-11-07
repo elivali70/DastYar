@@ -1,0 +1,36 @@
+﻿@model BidOutPutViewModel
+<h2 class="mb-3 text-center text-bg-success p-3 ">
+ مشاهده پیشنهاد با شناسه @Model.Id
+</h2>
+<form >
+    <div class="mb-3">
+        <label class="form-label" asp-for="Id">  </label>
+        <input type="number" class="form-control" value=@Model.Id readonly="readonly" />
+    </div>
+  
+    <div class="mb-3">
+        <label class="form-label" asp-for="ExpertUserName">  </label>
+        <input type="number" class="form-control" value=@Model.ExpertUserName  readonly="readonly"/>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="SuggestedPrice">  </label>
+        <input type="text" class="form-control" value=@Model.SuggestedPrice readonly="readonly" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="OrderId">  </label>
+        <input type="datetime" class="form-control" value=@Model.OrderId readonly="readonly" />
+    </div>
+   
+    <div class="mb-3">
+        <label class="form-label" asp-for="CreatedAt">  </label>
+        <input type="datetime" class="form-control" value=@Model.CreatedAt readonly="readonly" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="ProposalStatus">  </label>
+        <input type="text" class="form-control" value=@Model.ProposalStatus readonly="readonly" />
+    </div>
+  
+    <div class="mb-3">
+        <a class="btn btn-primary " asp-area="Admin" asp-controller="Bid" asp-action="Index"><i class="fas fa-arrow-right"></i>بازگشت</a>
+    </div>
+</form>

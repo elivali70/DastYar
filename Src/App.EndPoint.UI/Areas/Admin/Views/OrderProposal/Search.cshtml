@@ -1,0 +1,49 @@
+﻿@model OrderProposalOutPutViewModel
+@{
+    ViewData["Title"] = "نتیجه جستجو";
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>نتیجه جستجو</h2>
+
+</div>
+<div class="card shadow mb-4">
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th scope="col">شناسه پیشنهاد</th>
+                        <th scope="col">شناسه سفارش</th>
+                        <th scope="col">نام کاربری متخصص</th>
+                        <th scope="col">قیمت پیشنهادی</th>
+                        <th scope="col">تاریخ ایجاد</th>
+                        <th scope="col">وضعیت</th>
+                        <th scope="col">تاریخ انجام کار</th>
+                        <th scope="col">مدت زمان انجام کار</th>
+                        <th scope="col">توضیحات</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>@Model.Id</td>
+                        <td>@Model.OrderId </td>
+                        <td>@Model.ExpertUserName </td>
+                        <td>@Model.SuggestedPrice</td>
+                        <td>@Model.CreatedAt </td>
+                        <td>@Model.ProposalStatus</td>
+                        <td>@Model.StatrtedDateTime</td>
+                        <td>@Model.DurationTime</td>
+                        <td>@Model.Discription</td>
+
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

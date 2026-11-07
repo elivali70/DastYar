@@ -1,0 +1,62 @@
+﻿@using App.EndPoint.Mvc.ShopUI.Models
+@model RegisterViewModel
+<h2 class="mb-3 text-center text-bg-success p-3 ">
+    اضافه کردن کاربر جدید
+</h2>
+<div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card-body p-0">
+
+        <form asp-controller="Account" asp-action="ExpertRegister" method="post">
+            <div class="form-group row">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="col-sm-6">
+                    <label class="form-label" asp-for="Name">  </label>
+                    <input type="text" class="form-control" asp-for="Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label class="form-label" asp-for="LastName">  </label>
+                    <input type="text" class="form-control" asp-for="LastName" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label class="form-label" asp-for="UserName">  </label>
+                    <input type="text" class="form-control" asp-for="UserName" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div> <div class="col-sm-6">
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Email">  </label>
+                        <input type="email" class="form-control" asp-for="Email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" asp-for="PhoneNumber">  </label>
+                        <input type="tel" class="form-control" asp-for="PhoneNumber" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" asp-for="Password">  </label>
+                        <input type="password" class="form-control" asp-for="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" asp-for="ConfirmPassword">  </label>
+                        <input type="password" class="form-control" asp-for="ConfirmPassword" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" asp-for="Address">  </label>
+                        <input type="text" class="form-control" asp-for="Address" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        >
+                        <button type="submit">ذخیره</button>
+                        <a class="btn btn-primary" asp-controller="Accoount" asp-action="Index"><i class="fas fa-arrow-right"></i>بازگشت</a>
+                    </div>
+                </div>
+        </form>
+
+
+    </div>
+</div>
