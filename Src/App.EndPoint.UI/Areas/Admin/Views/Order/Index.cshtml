@@ -13,7 +13,7 @@
 <div class="input-group">
     <form id="searchForm" asp-area="Admin" asp-controller="Order" asp-action="Search" method="get">
 
-        <input type="search" id="searchKeyword" name="keyWord" class="form-control rounded" placeholder="کلمه کلیدی سفارش را وارد کنید" name="keyWord" />
+        <input type="search" id="searchKeyword" name="keyWord" class="form-control rounded" placeholder="کلمه کلیدی سفارش را وارد کنید" />
   
         <button type="submit" class="btn btn-primary btn-lg">جستجو</button>
     </form>
@@ -81,7 +81,7 @@
                                 <a asp-area="Admin" asp-controller="Order" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-info"> جزئیات </a>
                                 <form asp-area="Admin" asp-controller="Order" asp-action="Delete"
                                       asp-route-id="@item.Id" method="post" onsubmit="return confirm('آیا از حذف این سفارش مطمئن هستید؟');">
-                                    <button type="submit" class=" btn btn-danger" value="حذف"></button>
+                                    <button type="submit" class=" btn btn-danger" >حذف</button>
                                 </form>
                             </td>
                         </tr>

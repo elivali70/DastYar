@@ -89,5 +89,44 @@ namespace App.Domain.Core.AppFile.Comntracts.Repositories
            
             return appFiles;
         }
+        public async Task<AppFileAdminDto?> GetForAdmin(string? keyWord,CancellationToken cancellationToken)
+        {
+            var appFile = await _appDbContext.Files.Where(x => !x.IsDeleted&& x.Name==keyWord).Select(a => new AppFileAdminDto()
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Path = a.Path,
+                Description = a.Description,
+                UserId = a.UserId,
+                CreatedAt = a.CreatedAt,
+                FileTypeName = a.FileType.Name,
+                Extention = a.FileType.Extention,
+                IsUsed = a.OrderFiles.Any() || a.ServiceFiles.Any(),
+                UploaderUserName = _userManager.Users.Where(u => u.Id == a.UserId).Select(u => u.UserName).FirstOrDefault()
+
+            }).FirstOrDefaultAsync(cancellationToken);
+
+            return appFile;
+        }
+
+        public async Task<AppFileAdminDto?> GetForAdmin(int id, CancellationToken cancellationToken)
+        {
+            var appFile = await _appDbContext.Files.Where(x => !x.IsDeleted && x.Id == id).Select(a => new AppFileAdminDto()
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Path = a.Path,
+                Description = a.Description,
+                UserId = a.UserId,
+                CreatedAt = a.CreatedAt,
+                FileTypeName = a.FileType.Name,
+                Extention = a.FileType.Extention,
+                IsUsed = a.OrderFiles.Any() || a.ServiceFiles.Any(),
+                UploaderUserName = _userManager.Users.Where(u => u.Id == a.UserId).Select(u => u.UserName).FirstOrDefault()
+
+            }).FirstOrDefaultAsync(cancellationToken);
+
+            return appFile;
+        }
     }
 }

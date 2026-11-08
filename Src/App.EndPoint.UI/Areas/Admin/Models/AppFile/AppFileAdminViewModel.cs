@@ -15,6 +15,7 @@
             public string FileTypeName { get; set; }
             public string Extention { get; set; }
             public string? Description { get; set; }
+        public bool IsUsed { get; set; }
 
     }
 }

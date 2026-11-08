@@ -1,0 +1,120 @@
+﻿@model AppFileAdminViewModel
+@{
+    ViewData["Title"] = "نتیجه جستجو";
+    int row = 1;
+}
+
+<div class="input-group">
+    <form id="searchForm" asp-area="Admin" asp-controller="AppFileManager" asp-action="Search" method="get">
+
+        <input type="search" id="searchKeyword" name="keyWord" class="form-control rounded" placeholder="تام فایل را وارد کنید" />
+
+        <button type="submit" class="btn btn-primary btn-lg">جستجو</button>
+    </form>
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">نتیجه جستجو</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th scope="col">شناسه فایل</th>
+                        <th scope="col">نام فایل</th>
+                        <th scope="col">تاریخ ایجاد</th>
+                        <th scope="col">توضیحات</th>
+                        <th scope="col">پسوند</th>
+                        <th scope="col">مسیر</th>
+                        <th scope="col">نوع فایل</th>
+                        <th scope="col">شناسه کاربر</th>
+                        <th scope="col">نام کاربری آپلودکننده فایل</th>
+                        <th scope="col">وضعیت فایل</th>
+                        <th scope="col">نمایش</th>
+                        <th scope="col">عملیات</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+
+                    <tr>
+                        <td>@Model.Id</td>
+                        <td> @Model.Name  </td>
+                        <td>@Model.CreatedAt </td>
+                        <td>@Model.Description</td>
+                        <td>@Model.Extention </td>
+                        <td>@Model.Path</td>
+                        <td>@Model.FileTypeName</td>
+                        <td>@Model.UserId</td>
+                        <td>@Model.UploaderUserName</td>
+                        <td>
+                            @if (Model.IsUsed)
+                            {
+                                <span class="text-success">استفاده‌شده</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">استفاده‌نشده</span>
+                            }
+                        </td>
+                        <td>
+
+                            <img src="@Model.Path" width="60" height="60" />
+                        </td>
+                        <td>
+                            @if (!Model.IsUsed)
+                            {
+                                <form asp-area="Admin" asp-controller="AppFileManager" asp-action="Delete"
+                                      asp-route-id="@Model.Id" method="post" onsubmit="return confirm('آیا از حذف این فایل مطمئن هستید؟');">
+                                    <button type="submit" class=" btn btn-danger">حذف</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="validationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">خطای اعتبارسنجی</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                لطفاً عبارت موردنظر برای جستجو را وارد کنید.
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    متوجه شدم
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+
+    const form = document.getElementById("searchForm");
+    const keyword = document.getElementById("searchKeyword");
+
+    form.addEventListener("submit", function (event) {
+
+        if (keyword.value.trim() === "") {
+            event.preventDefault();
+
+            const modal = new bootstrap.Modal(
+                document.getElementById("validationModal")
+            );
+
+            modal.show();
+        }
+    });
+</script>
