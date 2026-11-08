@@ -10,5 +10,6 @@ namespace App.Domain.Core.AppFile.Comntracts.Repositories
         Task<List<AppFileDto>> GetAll(CancellationToken cancellationToken);
         Task<AppFileDto?> Get(int  id,CancellationToken cancellationToken);
         Task<AppFileDto?> Get(string name, CancellationToken cancellationToken);
+        Task<List<AppFileAdminDto>> GetAllForAdmin(CancellationToken cancellationToken);
     }
 }
