@@ -10,13 +10,13 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
 
     [Area("Admin")]
     [Authorize(Roles = "AdminRole")]
-    public class OrederProposalController : Controller
+    public class OrderProposalController : Controller
     {
         private readonly IOrderProposalAppService _orderProposalAppService;
         private readonly IExpertAppService _expertAppService;
         private readonly IOrderAppService _orderAppService;
 
-        public OrederProposalController(IOrderProposalAppService orderProposalAppService,
+        public OrderProposalController(IOrderProposalAppService orderProposalAppService,
             IExpertAppService expertAppService,
             IOrderAppService orderAppService
             )

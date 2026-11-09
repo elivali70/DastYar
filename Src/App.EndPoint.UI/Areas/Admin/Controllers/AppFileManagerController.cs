@@ -1,9 +1,12 @@
 ﻿using App.EndPoint.UI.Areas.Admin.Models.AppFile;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace App.EndPoint.UI.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = "AdminRole")]
     public class AppFileManagerController : Controller
     {
         private readonly IAppFileAppService _appFileAppService;
@@ -15,9 +18,10 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var model= await _appFileAppService.GetAllFileForAdmin(cancellationToken);
-            var AppFileAdmin = new AppFileAdminViewModel();
+            var AppFileAdminList = new List<AppFileAdminViewModel>();
             foreach (var item in model)
             {
+            var AppFileAdmin = new AppFileAdminViewModel();
                 AppFileAdmin.Id = item.Id;
                 AppFileAdmin.Name = item.Name;
                 AppFileAdmin.Description = item.Description;
@@ -28,8 +32,9 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
                 AppFileAdmin.Extention= item.Extention;
                 AppFileAdmin.CreatedAt= item.CreatedAt;
                 AppFileAdmin.IsUsed=item.IsUsed;
+                AppFileAdminList.Add(AppFileAdmin);
             }
-            return View(AppFileAdmin);
+            return View(AppFileAdminList);
            
         }
         public async Task<IActionResult> Search(string keyWord,CancellationToken cancellationToken)

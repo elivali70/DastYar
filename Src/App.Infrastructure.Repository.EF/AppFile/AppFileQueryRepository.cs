@@ -1,5 +1,6 @@
 ﻿using App.Domain.Core.AppFile.Dtos;
 using App.Domain.Core.AppFile.Entities;
+using App.Domain.Core.User.Entities;
 using App.Infrastructure.DataBase.SQL.DbContext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,10 @@ namespace App.Domain.Core.AppFile.Comntracts.Repositories
     public class AppFileQueryRepository: IAppFileQueryRepository
     {
         private readonly AppDbContext _appDbContext;
-        private readonly UserManager<IdentityUser<int>> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
         public AppFileQueryRepository(AppDbContext appDbContext,
-            UserManager<IdentityUser<int>> userManager)
+            UserManager<AppUser> userManager)
         {
             _appDbContext = appDbContext;
             _userManager = userManager;
