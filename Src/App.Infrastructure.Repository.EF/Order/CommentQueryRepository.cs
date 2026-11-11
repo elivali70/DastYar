@@ -39,4 +39,17 @@ public class CommentQueryRepository: ICommentQueryRepository
         return comment;
 
     }
+
+    public async  Task<CommentDto?> GetByOrderId(int orderId, CancellationToken cancellationToken)
+    {
+        var comment = await _appDbContext.Comments.Where(x => !x.IsDeleted && x.OrderId==orderId).Select(s => new CommentDto()
+        {
+            Id = s.Id,
+            Discription = s.Discription,
+            CreatedAt = s.CreatedAt,
+            OrderId = s.OrderId,
+            UserId = s.UserId,
+        }).SingleOrDefaultAsync(cancellationToken);
+        return comment;
+    }
 }

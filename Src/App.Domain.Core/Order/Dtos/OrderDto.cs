@@ -11,7 +11,7 @@ namespace App.Domain.Core.Order.Dtos
         public int Id { get; set; }
 
         public int CustomerId { get; set; }
-        public int ExpertId { get; set; }
+        public int? ExpertId { get; set; }
 
         public int ServiceId { get; set; }
 
@@ -19,10 +19,7 @@ namespace App.Domain.Core.Order.Dtos
 
         public OrderStatusEnum OrderStatus { get; set; }
 
-       
-
         public int BasePrice { get; set; }
-
 
         public string Discription { get; set; } = null!;
 

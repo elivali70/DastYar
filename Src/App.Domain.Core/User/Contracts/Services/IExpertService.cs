@@ -10,7 +10,7 @@ namespace App.Domain.Core.User.Contracts.Services
     {
         Task<IdentityResult> Register(ExpertRegisterDto expertRegisterDto, CancellationToken cancellationToken);
         Task<int> Get(string userName, CancellationToken cancellationToken);
-        Task<ExpertDto> Get(int id, CancellationToken cancellationToken);
+        Task<ExpertDto> Get(int? id, CancellationToken cancellationToken);
         Task<List<ExpertDto>> GetAll(CancellationToken cancellationToken);
     }
 }

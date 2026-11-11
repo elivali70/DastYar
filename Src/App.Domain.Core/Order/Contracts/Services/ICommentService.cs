@@ -9,5 +9,7 @@ namespace App.Domain.Core.Order.Contracts.Services
     {
         Task<List<CommentDto>> GetAll(CancellationToken cancellationToken);
         Task Delete(int id, CancellationToken cancellationToken);
+        Task<CommentDto?> GetByOrderId(int orderId, CancellationToken cancellationToken);
+        Task Add(int userId, int OrderId, string discription, CancellationToken cancellationToken);
     }
 }

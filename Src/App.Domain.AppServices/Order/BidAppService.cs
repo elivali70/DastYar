@@ -37,5 +37,10 @@ namespace App.Domain.AppServices.Order
         {
              await _bidService.Update(bidDto, cancellationToken);
         }
+
+        public async Task<List<BidDto>> GetAllByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await _bidService.GetAllByOrderId(orderId, cancellationToken);
+        }
     }
 }

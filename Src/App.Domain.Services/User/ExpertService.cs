@@ -26,7 +26,7 @@ namespace App.Domain.Services.User
            var expert= await _expertQueryRepository.Get(userName, cancellationToken);
             return expert.Id;
         }
-        public async Task<ExpertDto> Get(int id, CancellationToken cancellationToken)
+        public async Task<ExpertDto> Get(int? id, CancellationToken cancellationToken)
         {
             var expert = await _expertQueryRepository.Get(id, cancellationToken);
             return expert;

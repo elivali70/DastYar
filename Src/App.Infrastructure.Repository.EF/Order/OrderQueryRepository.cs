@@ -2,6 +2,7 @@
 using App.Domain.Core.AppFile.Dtos;
 using App.Domain.Core.Order.Dtos;
 using App.Domain.Core.Order.Enities;
+using App.Domain.Core.Order.Enums;
 using App.Infrastructure.DataBase.SQL.DbContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -80,5 +81,55 @@ public class OrderQueryRepository : IOrderQueryRepository
 
     }
 
+    public async Task<List<OrderDto?>> GetAllForCustomer(int customerId, CancellationToken cancellationToken)
+    {
+        var oreders = await _appDbContext.Orders.Where(x => !x.IsDeleted && x.CustomerId == customerId).Select(s => new OrderDto()
+        {
+            Id = s.Id,
+            ServiceId = s.ServiceId,
+            BasePrice = s.BasePrice,
+            OrderStatus = s.OrderStatus,
+            CustomerId = s.CustomerId,
+            CreatedAt = s.CreatedAt,
+            PrefferedDateTime = s.PrefferedDateTime,
+            ExpertId = s.ExpertId,
+            Discription = s.Discription,
+        }).ToListAsync(cancellationToken);
+        return oreders;
+    }
+    public async Task<OrderDto?> GetForCustomer(int customerId,int orderId ,CancellationToken cancellationToken)
+    {
+        var oreder = await _appDbContext.Orders.Where(x => !x.IsDeleted && x.CustomerId == customerId && x.Id==orderId).Select(s => new OrderDto()
+        {
+            Id = s.Id,
+            ServiceId = s.ServiceId,
+            BasePrice = s.BasePrice,
+            OrderStatus = s.OrderStatus,
+            CustomerId = s.CustomerId,
+            CreatedAt = s.CreatedAt,
+            PrefferedDateTime = s.PrefferedDateTime,
+            ExpertId = s.ExpertId,
+            Discription = s.Discription,
+        }).SingleOrDefaultAsync(cancellationToken);
+        return oreder;
+    }
+
+    public async Task<List<OrderDto?>> GetAccepted(int customerId, CancellationToken cancellationToken)
+    {
+        var oreders = await _appDbContext.Orders.Where(x => !x.IsDeleted && x.CustomerId == customerId &&
+        x.OrderStatus==OrderStatusEnum.Completed).Select(s => new OrderDto()
+        {
+            Id = s.Id,
+            ServiceId = s.ServiceId,
+            BasePrice = s.BasePrice,
+            OrderStatus = s.OrderStatus,
+            CustomerId = s.CustomerId,
+            CreatedAt = s.CreatedAt,
+            PrefferedDateTime = s.PrefferedDateTime,
+            ExpertId = s.ExpertId,
+            Discription = s.Discription,
+        }).ToListAsync(cancellationToken);
+        return oreders;
+    }
 }
   

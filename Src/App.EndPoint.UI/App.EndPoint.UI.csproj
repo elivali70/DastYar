@@ -31,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Data\" />
     <Folder Include="wwwroot\pics\" />
     <Folder Include="wwwroot\upload\product\5\" />
     <Folder Include="wwwroot\videos\" />

@@ -12,5 +12,7 @@ namespace App.Domain.Core.Order.Contracts.Services
         Task Delete(int id, CancellationToken cancellationToken);
         Task<BidDto> Get(int id, CancellationToken cancellationToken);
         Task Update(BidDto bidDto, CancellationToken cancellationToken);
+        Task<List<BidDto>> GetAllByOrderId(int orderId, CancellationToken cancellationToken);
+
     }
 }

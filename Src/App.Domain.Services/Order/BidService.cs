@@ -32,6 +32,11 @@ namespace App.Domain.Services.Order
             return await _bidQueryRepository.GetAll(cancellationToken);
         }
 
+        public async Task<List<BidDto>> GetAllByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+           return await _bidQueryRepository.GetAllByOrderId(orderId, cancellationToken);
+        }
+
         public async Task<List<BidDto>> Search(string keyWord, CancellationToken cancellationToken)
         {
             return await _bidQueryRepository.GetAll(keyWord, cancellationToken);

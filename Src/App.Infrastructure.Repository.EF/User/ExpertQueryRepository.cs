@@ -30,7 +30,7 @@ public class ExpertQueryRepository:IExpertQueryRepository
         }).ToListAsync(cancellationToken);
         return expertUsers;
     }
-   public async Task<ExpertDto?> Get(int userId, CancellationToken cancellationToken)
+   public async Task<ExpertDto?> Get(int? userId, CancellationToken cancellationToken)
     {
         var expertUser = await _appDbContext.Experts.Where(x => !x.User.IsDeleted && x.UserId == userId).Select(s => new ExpertDto()
         {

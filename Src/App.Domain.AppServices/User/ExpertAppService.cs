@@ -19,13 +19,13 @@ namespace App.Domain.AppServices.User
             _expertService = expertService;
         }
 
-        public Task<int> Get(string userName, CancellationToken cancellationToken)
+        public async Task<int> Get(string userName, CancellationToken cancellationToken)
         {
-            return _expertService.Get(userName, cancellationToken);
+            return await _expertService.Get(userName, cancellationToken);
         }
-        public Task<ExpertDto> Get(int id, CancellationToken cancellationToken)
+        public async Task<ExpertDto> Get(int? id, CancellationToken cancellationToken)
         {
-            return _expertService.Get(id, cancellationToken);
+            return  await _expertService.Get(id, cancellationToken);
         }
         public async Task<List<ExpertDto>> GetAll(CancellationToken cancellationToken)
         {

@@ -5,4 +5,6 @@ public interface IBidQueryRepository
     Task<List<BidDto>> GetAll(CancellationToken cancellationToken);
     Task<BidDto?> Get(int id, CancellationToken cancellationToken);
     Task<List<BidDto>> GetAll(string? keyWord, CancellationToken cancellationToken);
+    Task<List<BidDto>> GetAllByOrderId(int orderId, CancellationToken cancellationToken);
+
 }

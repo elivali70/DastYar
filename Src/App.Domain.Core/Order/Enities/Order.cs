@@ -17,7 +17,7 @@ public partial class Order
 
     public OrderStatusEnum OrderStatus { get; set; }
 
-    public int ExpertId { get; set; }
+    public int? ExpertId { get; set; }
 
     public int BasePrice { get; set; }
     public bool IsDeleted { get; set; }

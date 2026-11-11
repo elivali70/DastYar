@@ -21,6 +21,10 @@ namespace App.Domain.Services.Service
             return await _serviceQueryRepository.Get(id, cancellationToken);
         }
 
+        public async Task<List<ServiceDto>> GetAll(CancellationToken cancellationToken)
+        {
+            return await _serviceQueryRepository.GetAll(cancellationToken);
+        }
         public async Task<int> GetId(string name, CancellationToken cancellationToken)
         {
             var service = await _serviceQueryRepository.Get(name, cancellationToken);

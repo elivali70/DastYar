@@ -1,0 +1,22 @@
+﻿@model CommentInPutViewModel
+<h2 class="mb-3 text-center text-bg-success p-3 ">
+    ثیت دیدگاه
+</h2>
+<form asp-area="Customer" asp-controller="Order" asp-action="AddComment" method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="OrderId">   </label>
+        <input type="number" class="form-control" asp-for="OrderId" readonly="readonly"/>
+        <span asp-validation-for="OrderId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Discription">   </label>
+        <input type="number" class="form-control" asp-for="Discription" />
+        <span asp-validation-for="Discription" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success"> ذخیره</button>
+        <a class="btn btn-primary " asp-area="Customer" asp-controller="Order" asp-action="Index"><i class="fas fa-arrow-right"></i>بازگشت</a>
+    </div>
+</form>

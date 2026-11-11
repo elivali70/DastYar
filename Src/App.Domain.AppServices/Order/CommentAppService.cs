@@ -24,5 +24,15 @@ namespace App.Domain.AppServices.Order
         {
              await _commentService.Delete(id,cancellationToken);
         }
+
+        public async Task<CommentDto?> GetByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await _commentService.GetByOrderId(orderId,cancellationToken);
+        }
+
+        public async Task Add(int customerId, int OrderId, string discription, CancellationToken cancellationToken)
+        {
+            await _commentService.Add(customerId, OrderId, discription, cancellationToken);
+        }
     }
 }

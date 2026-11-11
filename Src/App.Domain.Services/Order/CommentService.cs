@@ -18,6 +18,17 @@ namespace App.Domain.Services.Order
             _commentCommandRepository = commentCommandRepository;
         }
 
+        public async Task Add(int userId, int OrderId, string discription, CancellationToken cancellationToken)
+        {
+            var commentDto = new CommentDto()
+            {
+                Discription = discription,
+                OrderId = OrderId,
+                UserId = userId,
+            };
+            await _commentCommandRepository.Add(commentDto, cancellationToken);
+        }
+
         public async Task Delete(int id, CancellationToken cancellationToken)
         {
             await _commentCommandRepository.Delete(id, cancellationToken);
@@ -26,6 +37,11 @@ namespace App.Domain.Services.Order
         public async Task<List<CommentDto>> GetAll(CancellationToken cancellationToken)
         {
             return await _commentQueryRepository.GetAll(cancellationToken);
+        }
+
+        public async Task<CommentDto?> GetByOrderId(int orderId, CancellationToken cancellationToken)
+        {
+            return await _commentQueryRepository.GetByOrderId(orderId, cancellationToken);
         }
     }
 }

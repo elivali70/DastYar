@@ -1,0 +1,110 @@
+﻿@model List<OrdersAcceptedViewModel>
+@{
+    ViewData["Title"] = "لیست سقارشات پذیرفته شده قبلی";
+    int row = 1;
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>لیست سقارشات پذیرفته شده قبلی</h2>
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">لیست سقارشات پذیرفته شده قبلی</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th scope="col">ردیف</th>
+                            <th scope="col">شناسه سفارش</th>
+                            <th scope="col">تاریخ ایجاد</th>
+                            <th scope="col">شناسه خدمات</th>
+                            <th scope="col">نام کاربری متخصص</th>
+                            <th scope="col">نظرات</th>
+                            <th scope="col">تاریخ ثیت نظر</th>
+                            <th scope="col">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th scope="col">ردیف</th>
+                            <th scope="col">شناسه سفارش</th>
+                            <th scope="col">تاریخ ایجاد</th>
+                            <th scope="col">شناسه خدمات</th>
+                            <th scope="col">نام کاربری متخصص</th>
+                            <th scope="col">نظرات</th>
+                            <th scope="col">تاریخ ثیت نظر</th>
+                            <th scope="col">عملیات</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@row</td>
+                                <td>@item.Id</td>
+                                <td> @item.OrderId </td>
+                                <td>@item.CreatedAt</td>
+                                <td>@item.ServiceId </td>
+                                <td>@item.ExpertUserName</td>
+                                <td>@item.Comment</td>
+                                <td>@item.CommentCreatedTime</td>
+                                <td>
+                                    <a asp-area="Customer" asp-controller="Order" asp-action="AddComment"
+                                       asp-route-id="@item.Id" class="btn  btn-danger "> ثیت دیدگاه </a>
+                                    <form asp-area="Customer" asp-controller="Order" asp-action="DeleteCommet"
+                                          asp-route-id="@item.Id" method="post" onsubmit="return confirm('آیا از حذف این کامنت مطمئن هستید؟');">
+                                        <button type="submit" class=" btn btn-danger">حذف</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            row++;
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="validationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">خطای اعتبارسنجی</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    لطفاً عبارت موردنظر برای جستجو را وارد کنید.
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        متوجه شدم
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+
+        const form = document.getElementById("searchForm");
+        const keyword = document.getElementById("searchKeyword");
+
+        form.addEventListener("submit", function (event) {
+
+            if (keyword.value.trim() === "") {
+                event.preventDefault();
+
+                const modal = new bootstrap.Modal(
+                    document.getElementById("validationModal")
+                );
+
+                modal.show();
+            }
+        });
+    </script>

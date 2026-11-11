@@ -9,5 +9,6 @@ namespace App.Domain.Core.Service.Contracts.AppServices
     {
         Task<int> GetId(string name,CancellationToken cancellationToken);
         Task<ServiceDto?> Get(int id,CancellationToken cancellationToken);
+        Task<List<ServiceDto>> GetAll(CancellationToken cancellationToken);
     }
 }

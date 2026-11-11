@@ -6,4 +6,5 @@ public interface ICommentQueryRepository
 {
     Task<List<CommentDto>> GetAll(CancellationToken cancellationToken);
     Task<CommentDto?> Get(int orderId, CancellationToken cancellationToken);
+    Task<CommentDto?> GetByOrderId(int orderId, CancellationToken cancellationToken);
 }

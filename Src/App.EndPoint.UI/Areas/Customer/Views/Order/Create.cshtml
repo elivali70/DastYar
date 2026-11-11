@@ -1,0 +1,42 @@
+﻿
+@model OrderCustomerViewModel
+<h2 class="mb-3 text-center text-bg-success p-3 ">
+    ایجاد سفارش جدید
+</h2>
+<form asp-area="Customer" asp-controller="Order" asp-action="Create" method="post">
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="CustomerId">   </label>
+        <input type="number" class="form-control" asp-for="CustomerId" readonly="readonly"/>
+        <span asp-validation-for="CustomerId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Discription">  </label>
+        <input type="text" class="form-control" asp-for="Discription" />
+        <span asp-validation-for="Discription" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="PrefferedDateTime">  </label>
+        <input type="datetime-local" class="form-control" asp-for="PrefferedDateTime" />
+        <span asp-validation-for="PrefferedDateTime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" asp-for="ServiceId">  </label>
+        <select class="form-select" asp-for="ServiceId">
+
+            @foreach (var item in ViewBag.service)
+            {
+                <option value=@item.id>@item.Name</option>
+            }
+        </select>
+
+        <span asp-validation-for="ServiceId" class="text-danger"></span>
+    </div>
+   
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success"> ذخیره</button>
+        <a class="btn btn-primary " asp-area="Customer" asp-controller="Order" asp-action="Index"><i class="fas fa-arrow-right"></i>بازگشت</a>
+    </div>
+</form>

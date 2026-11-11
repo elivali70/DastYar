@@ -21,6 +21,11 @@ namespace App.Domain.AppServices.Service
             return _serviceService.Get(id, cancellationToken);
         }
 
+        public async Task<List<ServiceDto>> GetAll(CancellationToken cancellationToken)
+        {
+            return await _serviceService.GetAll(cancellationToken);
+        }
+
         public async Task<int> GetId(string name, CancellationToken cancellationToken)
         {
             return await _serviceService.GetId(name, cancellationToken);
