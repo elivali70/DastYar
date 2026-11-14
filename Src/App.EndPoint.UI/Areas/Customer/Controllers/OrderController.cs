@@ -24,6 +24,7 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         private readonly IExpertAppService _expertAppService;
         private readonly IBidAppService _bidAppService;
         private readonly ICommentAppService _commentAppService;
+        private readonly ICustomerAppService _customerAppService;
 
         public OrderController(IServiceAppService serviceAppService,
             IOrderAppService orderAppService,
@@ -31,7 +32,8 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
             UserManager<AppUser> userManager,
             IExpertAppService expertAppService,
             IBidAppService bidAppService,
-            ICommentAppService commentAppService)
+            ICommentAppService commentAppService,
+            ICustomerAppService customerAppService)
         {
             _serviceAppService = serviceAppService;
             _orderAppService = orderAppService;
@@ -40,12 +42,15 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
             _expertAppService = expertAppService;
             _bidAppService = bidAppService;
             _commentAppService = commentAppService;
+            _customerAppService = customerAppService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var customerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var customer= _customerAppService.Get(userId, cancellationToken);
+            var customerId = customer.Id;
             var order = await _orderAppService.GetAllForCustomer(customerId, cancellationToken);
             var orderList = new List<OrderOutPutCustomeViewModel>();
             foreach (var item in order)
@@ -101,7 +106,9 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         public async Task<IActionResult> Create(CancellationToken cancellationToken)
         {
             var model = new OrderCustomerViewModel();
-            model.CustomerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId= int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var customer = _customerAppService.Get(userId, cancellationToken);
+            model.CustomerId = customer.Id;
             var service = await _serviceAppService.GetAll(cancellationToken);
             ViewBag.Service = service;
             return View(model);
@@ -180,7 +187,9 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> SelectBid(int bidId, CancellationToken cancellationToken)
         {
-            var customerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var customer = _customerAppService.Get(userId, cancellationToken);
+           var customerId = customer.Id;
             await _orderAppService.SelectBid(customerId,bidId, cancellationToken);
            return RedirectToAction("Index");
         }
@@ -227,13 +236,16 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         {
             if (ModelState.IsValid)
             {
-            var customerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            await _commentAppService.Add(customerId, model.OrderId, model.Discription, cancellationToken);
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var customer = _customerAppService.Get(userId, cancellationToken);
+                var customerId = customer.Id;
+                await _commentAppService.Add(customerId, model.OrderId, model.Discription, cancellationToken);
                 return LocalRedirect("~/");
             }
             ModelState.AddModelError(string.Empty, "ثیت دیدگاه را مجددا انجام دهید");
             return View(model);
         }
+     
     }
 
 }

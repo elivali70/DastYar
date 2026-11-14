@@ -28,4 +28,19 @@ public class CustomerService : ICustomerService
     {
         return await _customerCommandRepository.Add(customerRegisterDto, cancellationToken);
     }
+
+    public async Task Update(int userId, string name, string phoneNumber, string email, string userName, string address, int fileId, CancellationToken cancellationToken)
+    {
+        var customerDto = new CustomerDto()
+        {
+            UserId = userId,
+            Name = name,
+            PhoneNumber = phoneNumber,
+            Email = email,
+            UserName = userName,
+            Address = address,
+            PictureFileId = fileId,
+        };
+       await _customerCommandRepository.Update(customerDto, cancellationToken);
+    }
 }

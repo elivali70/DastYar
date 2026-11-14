@@ -26,4 +26,8 @@ public class CustomerAppService : ICustomerAppService
         return await _customerService.Get(id, cancellationToken);
     }
 
+    public async Task Update(int userId, string name, string phoneNumber, string email, string userName, string address, int fileId, CancellationToken cancellationToken)
+    {
+         await _customerService.Update(userId, name, phoneNumber, email, userName, address, fileId, cancellationToken);
+    }
 }

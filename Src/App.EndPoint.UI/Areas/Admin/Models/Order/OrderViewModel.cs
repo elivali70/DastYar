@@ -15,7 +15,7 @@ namespace App.EndPoint.UI.Areas.Admin.Models.Order
         [Display(Name = "وضعیت سفارش")]
         public OrderStatusEnum OrderStatus { get; set; }
         [Display(Name = "شناسه متخصص")]
-        public int ExpertId { get; set; }
+        public int? ExpertId { get; set; }
         [Display(Name = " قیمت پایه")]
         public int BasePrice { get; set; }
         [Display(Name = "تاریخ ایجاد")]

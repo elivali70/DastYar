@@ -30,7 +30,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">پروفایل ادمین </div>
+                <div class="sidebar-brand-text mx-3">پروفایل مشتری </div>
             </a>
 
             <!-- Divider -->
@@ -61,95 +61,30 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">منوی پروفایل</h6>
-                        <a class="collapse-item" href="buttons.html">پروفایل</a>
-                        <a class="collapse-item" asp-area="Admin" asp-controller="UserManager" asp-action="ChangPassword">رمز عبور</a>
+                        <a class="collapse-item" asp-area="Customer" asp-controller="Home" asp-action="UpdateProfile">ویرایش پروفایل</a>
+                        <a class="collapse-item" asp-area="Customer" asp-controller="Home" asp-action="ChangPassword">رمز عبور</a>
                     </div>
                 </div>
             </li>
             <hr class="sidebar-divider">
 
             <div class="sidebar-heading">
-                مدیریت خدمات
+                مدیریت سفارش ها
             </div>
+           
             <li class="nav-item">
-                <a class="nav-link" class="collapse-item" asp-area="Admin" asp-controller="Category" asp-action="Index">
+                <a class="nav-link" class="collapse-item" asp-area="Customer" asp-controller="Order" asp-action="Create">
                     <i class="fas fa-fw fa-trademark"></i>
-                    <span>دسته بندی اصلی خدمات</span>
+                    <span> ثبت سفارش </span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" class="collapse-item" asp-area="Admin" asp-controller="Service" asp-action="Index">
+                <a class="nav-link" class="collapse-item" asp-area="Customer" asp-controller="Order" asp-action="AcceptedOrders">
                     <i class="fas fa-fw fa-trademark"></i>
-                    <span> سرویس ها</span>
+                    <span>  مشاهده سفارش های قیلی </span>
                 </a>
             </li>
-          
-            <hr class="sidebar-divider">
-            <div class="sidebar-heading">
-                مدیریت کاربران
-            </div>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUsers">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>کاربران</span>
-                </a>
-                <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">منوی کابران:</h6>
-                        <a class="collapse-item" asp-area="Admin" asp-controller="UserManager" asp-action="Index">ادمین</a>
-                        <a class="collapse-item" href="utilities-border.html">متخصص</a>
-                        <a class="collapse-item" href="utilities-animation.html">مشتری</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <div class="sidebar-heading">
-                مدیریت سفارشات
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link" class="collapse-item" asp-area="Admin" asp-controller="Order" asp-action="Index">
-                    <i class="fas fa-fw fa-trademark"></i>
-                    <span>سفارش ها</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" class="collapse-item" asp-area="Admin" asp-controller="OrderProposal" asp-action="Index">
-                    <i class="fas fa-fw fa-cubes"></i>
-                    <span> وضعیت سفارش ها</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" class="collapse-item" asp-area="Admin" asp-controller="Bid" asp-action="Index">
-                    <i class="fas fa-fw fa-cubes"></i>
-                    <span> مناقصه ها</span>
-                </a>
-            </li>
-
-            <hr class="sidebar-divider">
-            <div class="sidebar-heading">
-               سایر 
-            </div>
-          
-            <li class="nav-item">
-                <a class="nav-link" class="collapse-item" asp-area="Admin" asp-controller="AppFileManager" asp-action="Index">
-                    <i class="fas fa-fw fa-cubes"></i>
-                    <span>مدیریت فایل ها</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" class="collapse-item" asp-area="Admin" asp-controller="Comment" asp-action="Index">
-                    <i class="fas fa-fw fa-cubes"></i>
-                    <span>مدیریت نظرات </span>
-                </a>
-            </li>
-
+           
         </ul>
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->
@@ -169,13 +104,13 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">الناز ولی پور</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">@User.Identity.Name  </span>
                                 <img class="img-profile rounded-circle" src="img/eliprofile.jpg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
-                                <a class="dropdown-item" asp-area="Admin" asp-controller="UserManager" asp-action="ChangePassword">
+                                <a class="dropdown-item" asp-area="Customer" asp-controller="Home" asp-action="ChangePassword">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     تغییر رمز عیور
                                 </a>
