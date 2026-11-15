@@ -17,7 +17,7 @@ namespace App.Domain.Core.Order.Contracts.AppServices
         Task<List<OrderDto?>> GetAllForCustomer(int customerId, CancellationToken cancellationToken);
         Task<List<OrderDto?>> GetAccepted(int customerId, CancellationToken cancellationToken);
         Task<OrderDto?> GetForCustomer(int customerId, int orderId, CancellationToken cancellationToken);
-        Task<List<OrderDto?>> GetAll(string? keyWord, CancellationToken cancellationToken);
+        Task<List<OrderDto?>> Search(string? keyWord, CancellationToken cancellationToken);
        Task<int> Set(int customerId,string Discription,DateTime PrefferedDateTime,int ServiceId,CancellationToken cancellationToken);
         Task SelectBid(int customerId,int bidId,CancellationToken cancellationToken);
     }

@@ -43,9 +43,9 @@ namespace App.Domain.AppServices.Order
             return await _orderService.GetAccepted(customerId, cancellationToken);
         }
 
-        public async Task<List<OrderDto>?> GetAll(string? keyWord, CancellationToken cancellationToken)
+        public async Task<List<OrderDto>?> Search(string? keyWord, CancellationToken cancellationToken)
         {
-            return await _orderService.GetAll(keyWord, cancellationToken);
+            return await _orderService.Search(keyWord, cancellationToken);
         }
 
         public Task<List<OrderDto>> GetAll(CancellationToken cancellationToken)

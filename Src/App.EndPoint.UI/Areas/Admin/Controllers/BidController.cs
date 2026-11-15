@@ -18,7 +18,7 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
     {
         private readonly IBidAppService _bidAppService;
         private readonly IExpertAppService _expertAppService;
-       
+
 
         public BidController(IBidAppService bidAppService,
             IExpertAppService expertAppService
@@ -26,27 +26,28 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
         {
             _bidAppService = bidAppService;
             _expertAppService = expertAppService;
-           
+
         }
-        public async Task< IActionResult> Index(CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-          
+
             var model = await _bidAppService.GetAll(cancellationToken);
-            var bids= new List<BidOutPutViewModel>();
-            foreach(var item in model)
+            var bids = new List<BidOutPutViewModel>();
+            foreach (var item in model)
             {
                 var expert = await _expertAppService.Get(item.ExpertId, cancellationToken);
-               var bid= new BidOutPutViewModel() {
-                   Id=item.Id,
-                   CreatedAt=item.CreatedAt,
-                   ExpertUserName=expert.UserName,
-                   OrderId=item.Id,
-                   ProposalStatus=item.ProposalStatus,
-                   SuggestedPrice=item.SuggestedPrice,
-               };
+                var bid = new BidOutPutViewModel()
+                {
+                    Id = item.Id,
+                    CreatedAt = item.CreatedAt,
+                    ExpertUserName = expert.UserName,
+                    OrderId = item.Id,
+                    ProposalStatus = item.ProposalStatus,
+                    SuggestedPrice = item.SuggestedPrice,
+                };
                 bids.Add(bid);
             }
-           
+
             return View(bids);
         }
         public async Task<IActionResult> Search(string keyWord, CancellationToken cancellationToken)
@@ -95,7 +96,7 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
         {
             var order = await _bidAppService.Get(id, cancellationToken);
             var expert = await _expertAppService.Get(order.ExpertId, cancellationToken);
-            
+
             var bidViewModel = new BidOutPutViewModel()
             {
                 Id = order.Id,
@@ -114,16 +115,16 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var expertId=await _expertAppService.Get(model.ExpertUserName, cancellationToken);
+                var expertId = await _expertAppService.Get(model.ExpertUserName, cancellationToken);
                 var bidDto = new BidDto()
                 {
                     Id = model.Id,
-                   CreatedAt=model.CreatedAt,
-                   ExpertId = expertId,
-                   OrderId=model.OrderId,
-                   ProposalStatus=model.ProposalStatus,
-                   SuggestedPrice=model.SuggestedPrice,
-                   
+                    CreatedAt = model.CreatedAt,
+                    ExpertId = expertId,
+                    OrderId = model.OrderId,
+                    ProposalStatus = model.ProposalStatus,
+                    SuggestedPrice = model.SuggestedPrice,
+
                 };
                 await _bidAppService.Update(bidDto, cancellationToken);
                 return LocalRedirect("~/");
@@ -136,5 +137,5 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
         }
 
 
-}
+    }
 }

@@ -27,10 +27,11 @@ public class ExpertQueryRepository:IExpertQueryRepository
             SubmitDate = s.User.SubmitDate,
             UserName = s.User.UserName,
             IsActive = s.User.IsActive,
+            Services=s.Services,
         }).ToListAsync(cancellationToken);
         return expertUsers;
     }
-   public async Task<ExpertDto?> Get(int? userId, CancellationToken cancellationToken)
+   public async Task<ExpertDto?> Get(int userId, CancellationToken cancellationToken)
     {
         var expertUser = await _appDbContext.Experts.Where(x => !x.User.IsDeleted && x.UserId == userId).Select(s => new ExpertDto()
         {
@@ -45,12 +46,13 @@ public class ExpertQueryRepository:IExpertQueryRepository
             SubmitDate = s.User.SubmitDate,
             UserName = s.User.UserName,
             IsActive = s.User.IsActive,
+            Services = s.Services,
         }).SingleOrDefaultAsync(cancellationToken);
         return expertUser;
     }
    public async Task<ExpertDto?> Get(string userName, CancellationToken cancellationToken)
     {
-        var expertUser = await _appDbContext.Customers.Where(x => !x.User.IsDeleted && x.User.UserName == userName).Select(s => new ExpertDto()
+        var expertUser = await _appDbContext.Experts.Where(x => !x.User.IsDeleted && x.User.UserName == userName).Select(s => new ExpertDto()
         {
             Id = s.Id,
             UserId = s.User.Id,
@@ -63,6 +65,7 @@ public class ExpertQueryRepository:IExpertQueryRepository
             SubmitDate = s.User.SubmitDate,
             UserName = s.User.UserName,
             IsActive = s.User.IsActive,
+            Services = s.Services,
         }).SingleOrDefaultAsync(cancellationToken);
         return expertUser;
     }

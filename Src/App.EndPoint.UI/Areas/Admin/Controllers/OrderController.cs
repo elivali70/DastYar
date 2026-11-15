@@ -1,18 +1,12 @@
-﻿using App.Domain.AppServices.AppFile;
-using App.Domain.Core.AppFile.Dtos;
-using App.Domain.Core.Order.Contracts.AppServices;
+﻿using App.Domain.Core.Order.Contracts.AppServices;
 using App.Domain.Core.Order.Dtos;
 using App.Domain.Core.Order.Enums;
 using App.Domain.Core.Service.Contracts.AppServices;
-using App.Domain.Core.Service.Contracts.Repositories;
 using App.Domain.Core.User.Contracts.AppServices;
-using App.Domain.Core.User.Contracts.Repositories;
-using App.EndPoint.UI.Areas.Admin.Models.AppFile;
 using App.EndPoint.UI.Areas.Admin.Models.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Authentication.ExtendedProtection;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace App.EndPoint.UI.Areas.Admin.Controllers
 {
@@ -25,24 +19,24 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
         private readonly IServiceAppService _serviceAppService;
         private readonly IExpertAppService _expertAppService;
         private readonly ICustomerAppService _customerAppService;
-       
+
 
         public OrderController(IOrderAppService orderAppService,
             IServiceAppService serviceAppService,
             IExpertAppService expertAppService,
             ICustomerAppService customerAppService
-           
+
            )
         {
             _orderAppService = orderAppService;
             _serviceAppService = serviceAppService;
             _expertAppService = expertAppService;
             _customerAppService = customerAppService;
-           
+
         }
         public async Task<IActionResult> Index(string? keyWord, CancellationToken cancellationToken)
         {
-            var model = await _orderAppService.GetAll(keyWord, cancellationToken);
+            var model = await _orderAppService.Search(keyWord, cancellationToken);
             var orderViewModel = model.Select(s => new OrderViewModel()
             {
                 Id = s.Id,
@@ -73,8 +67,8 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
 
-                var model = await _orderAppService.GetAll(keyWord, cancellationToken);
-                var orderViewModel = model.Select(s => new OrderViewModel()
+                var models = await _orderAppService.Search(keyWord, cancellationToken);
+                var ordersViewModel = models.Select(s => new OrderViewModel()
                 {
                     Id = s.Id,
                     BasePrice = s.BasePrice,
@@ -88,7 +82,7 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
 
                 }).ToList();
 
-                return View(orderViewModel);
+                return View(ordersViewModel);
             }
             return LocalRedirect("~/");
         }
@@ -142,7 +136,6 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
                 PrefferedDateTime = order.PrefferedDateTime,
                 ServiceId = order.ServiceId,
             };
-            ViewBag.OrderStatus = Enum.GetNames<OrderStatusEnum>();
             return View(orderViewModel);
         }
         [HttpGet]

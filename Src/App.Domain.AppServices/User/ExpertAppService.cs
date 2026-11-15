@@ -23,9 +23,16 @@ namespace App.Domain.AppServices.User
         {
             return await _expertService.Get(userName, cancellationToken);
         }
-        public async Task<ExpertDto> Get(int? id, CancellationToken cancellationToken)
+        public async Task AddFavoriteServices(int expertId,List<int> serviceId ,CancellationToken cancellationToken)
         {
-            return  await _expertService.Get(id, cancellationToken);
+            foreach (var id in serviceId)
+            {
+            await _expertService.AddFavoriteServices(expertId, id, cancellationToken);
+            }
+        }
+        public async Task<ExpertDto> Get(int userId, CancellationToken cancellationToken)
+        {
+            return  await _expertService.Get(userId, cancellationToken);
         }
         public async Task<List<ExpertDto>> GetAll(CancellationToken cancellationToken)
         {
@@ -38,6 +45,10 @@ namespace App.Domain.AppServices.User
             var result= await _expertService.Register(expertRegisterDto, cancellationToken);
             
             return result;
+        }
+        public async Task Update(int userId, string name, string phoneNumber, string email, string userName, string address, int fileId, CancellationToken cancellationToken)
+        {
+            await _expertService.Update(userId, name, phoneNumber, email, userName, address, fileId, cancellationToken);
         }
     }
 }

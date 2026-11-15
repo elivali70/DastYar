@@ -34,7 +34,7 @@ public class OrderQueryRepository : IOrderQueryRepository
     }
     public async Task<OrderDto?> Get(int id, CancellationToken cancellationToken)
     {
-        var oreder = await _appDbContext.Orders.Where(x => !x.IsDeleted&& x.Id==id).Select(s => new OrderDto()
+        var oreder = await _appDbContext.Orders.Where(x => !x.IsDeleted && x.Id == id).Select(s => new OrderDto()
         {
             Id = s.Id,
             ServiceId = s.ServiceId,
@@ -50,22 +50,22 @@ public class OrderQueryRepository : IOrderQueryRepository
 
     }
 
-    public async Task<List<OrderDto>?> GetAll(string? keyWord, CancellationToken cancellationToken)
+    public async Task<List<OrderDto>?> Search(string? keyWord, CancellationToken cancellationToken)
     {
         var orderList = new List<Order>();
         if (!string.IsNullOrWhiteSpace(keyWord))
         {
 
-            var order = await _appDbContext.Orders.Where(x => x.Discription.Contains(keyWord)).ToListAsync(cancellationToken);
+            var order = await _appDbContext.Orders.Where(x => (x.Discription + " " + x.Service.Name).Contains(keyWord)).ToListAsync(cancellationToken);
             orderList = order;
-       
+
         }
-      else
+        else
         {
-            var order= await _appDbContext.Orders.Where(x => !x.IsDeleted) .ToListAsync(cancellationToken);
+            var order = await _appDbContext.Orders.Where(x => !x.IsDeleted).ToListAsync(cancellationToken);
             orderList = order;
         }
-       var orderDto= orderList.Select(s => new OrderDto()
+        var orderDto = orderList.Select(s => new OrderDto()
         {
             Id = s.Id,
             ServiceId = s.ServiceId,
@@ -97,9 +97,9 @@ public class OrderQueryRepository : IOrderQueryRepository
         }).ToListAsync(cancellationToken);
         return oreders;
     }
-    public async Task<OrderDto?> GetForCustomer(int customerId,int orderId ,CancellationToken cancellationToken)
+    public async Task<OrderDto?> GetForCustomer(int customerId, int orderId, CancellationToken cancellationToken)
     {
-        var oreder = await _appDbContext.Orders.Where(x => !x.IsDeleted && x.CustomerId == customerId && x.Id==orderId).Select(s => new OrderDto()
+        var oreder = await _appDbContext.Orders.Where(x => !x.IsDeleted && x.CustomerId == customerId && x.Id == orderId).Select(s => new OrderDto()
         {
             Id = s.Id,
             ServiceId = s.ServiceId,
@@ -117,7 +117,7 @@ public class OrderQueryRepository : IOrderQueryRepository
     public async Task<List<OrderDto?>> GetAccepted(int customerId, CancellationToken cancellationToken)
     {
         var oreders = await _appDbContext.Orders.Where(x => !x.IsDeleted && x.CustomerId == customerId &&
-        x.OrderStatus==OrderStatusEnum.Completed).Select(s => new OrderDto()
+        x.OrderStatus == OrderStatusEnum.Completed).Select(s => new OrderDto()
         {
             Id = s.Id,
             ServiceId = s.ServiceId,
@@ -132,4 +132,3 @@ public class OrderQueryRepository : IOrderQueryRepository
         return oreders;
     }
 }
-  

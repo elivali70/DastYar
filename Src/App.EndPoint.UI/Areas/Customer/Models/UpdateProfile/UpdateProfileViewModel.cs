@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace App.EndPoint.UI.Areas.Customer.Models.UpdateProfile
 {
-    public class UpdateProfileViewModel
+    public class UpdateExpertProfileViewModel
     {
         [ReadOnly(true)]
         [Display(Name = "شناسه کاربر")]
@@ -29,7 +29,7 @@ namespace App.EndPoint.UI.Areas.Customer.Models.UpdateProfile
 
         [Required]
         [Display(Name = "شماره تماس")]
-        public string? PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Display(Name = " فایل")]
         public IFormFile File { get; set; }
@@ -42,6 +42,8 @@ namespace App.EndPoint.UI.Areas.Customer.Models.UpdateProfile
 
         [Display(Name = " آدرس ")]
         public string Address { get; set; }
+
+       
 
     }
 }

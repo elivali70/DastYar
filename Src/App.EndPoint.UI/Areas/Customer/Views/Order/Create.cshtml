@@ -24,12 +24,7 @@
 
     <div class="mb-3">
         <label class="form-label" asp-for="ServiceId">  </label>
-        <select class="form-select" asp-for="ServiceId">
-
-            @foreach (var item in ViewBag.service)
-            {
-                <option value=@item.id>@item.Name</option>
-            }
+        <select class="form-select" asp-for="ServiceId" asp-items="@ViewBag.Services">
         </select>
 
         <span asp-validation-for="ServiceId" class="text-danger"></span>

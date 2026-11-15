@@ -19,23 +19,23 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var comments= await _commentAppService.GetAll(cancellationToken);
-           var commentsViewModel= comments.Select(s => new CommentViewModel()
+            var comments = await _commentAppService.GetAll(cancellationToken);
+            var commentsViewModel = comments.Select(s => new CommentViewModel()
             {
                 Id = s.Id,
-                CreatedAt= s.CreatedAt,
-                Discription=s.Discription,
-                OrderId= s.OrderId,
-                UserId= s.UserId,
+                CreatedAt = s.CreatedAt,
+                Discription = s.Discription,
+                OrderId = s.OrderId,
+                UserId = s.UserId,
 
             }).ToList();
             return View(commentsViewModel);
         }
         [HttpPost]
-        public async Task<IActionResult> Delete(int id,CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
-             await _commentAppService.Delete(id,cancellationToken);
-           
+            await _commentAppService.Delete(id, cancellationToken);
+
             return View("Index");
         }
 

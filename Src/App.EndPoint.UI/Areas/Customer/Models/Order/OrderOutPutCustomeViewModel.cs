@@ -39,7 +39,7 @@ public class OrderOutPutCustomeViewModel
     public int SuggestedPrice { get; set; }
 
     [Display(Name = "مدت زمان انجام کار ")]
-    public int DurationTime { get; set; }
+    public int? DurationTime { get; set; }
 
     [Display(Name = " زمان شروع  ")]
     public DateTime StatrtedDateTime { get; set; }

@@ -19,12 +19,17 @@ namespace App.EndPoint.UI.Controllers.Account
         private readonly IExpertAppService _expertAppService;
         private readonly ICustomerAppService _customerAppService;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public AccountController(IExpertAppService expertAppService, ICustomerAppService customerAppService, SignInManager<AppUser> signInManager)
+        public AccountController(IExpertAppService expertAppService,
+            ICustomerAppService customerAppService,
+            SignInManager<AppUser> signInManager,
+            UserManager<AppUser> userManager)
         {
             _expertAppService = expertAppService;
            _customerAppService = customerAppService;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
         [AllowAnonymous]
         [HttpGet]
@@ -47,7 +52,19 @@ namespace App.EndPoint.UI.Controllers.Account
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    return LocalRedirect("~/");
+                   var user= await _userManager.FindByNameAsync(model.UserName);
+                    if (await _userManager.IsInRoleAsync(user, RoleEnum.AdminRole.ToString()))
+                    {
+                        return RedirectToAction("Index", "Home", new { area = "Admin" });
+                    }
+                    if (await _userManager.IsInRoleAsync(user, RoleEnum.CustomerRole.ToString()))
+                    {
+                        return RedirectToAction("Index", "Home", new { area = "Customer" });
+                    }
+                    if (await _userManager.IsInRoleAsync(user, RoleEnum.ExpertRole.ToString()))
+                    {
+                        return RedirectToAction("Index", "Home", new { area = "Expert" });
+                    }
                 }
                 ModelState.AddModelError(string.Empty, "خطا در فرایند لاگین");
             }

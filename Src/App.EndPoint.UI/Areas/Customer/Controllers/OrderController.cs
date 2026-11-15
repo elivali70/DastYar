@@ -7,6 +7,7 @@ using App.EndPoint.UI.Areas.Customer.Models.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var customer= _customerAppService.Get(userId, cancellationToken);
+            var customer = _customerAppService.Get(userId, cancellationToken);
             var customerId = customer.Id;
             var order = await _orderAppService.GetAllForCustomer(customerId, cancellationToken);
             var orderList = new List<OrderOutPutCustomeViewModel>();
@@ -65,7 +66,7 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
                     BasePrice = item.BasePrice,
                     Discription = item.Discription,
                     CreatedAt = item.CreatedAt,
-                    DurationTime = orderProposal.DurationTime,
+                    DurationTime = orderProposal?.DurationTime,
                     PrefferedDateTime = item.PrefferedDateTime,
                     StatrtedDateTime = orderProposal.StatrtedDateTime,
                     ServiceId = item.ServiceId,
@@ -106,11 +107,15 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         public async Task<IActionResult> Create(CancellationToken cancellationToken)
         {
             var model = new OrderCustomerViewModel();
-            var userId= int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var customer = _customerAppService.Get(userId, cancellationToken);
             model.CustomerId = customer.Id;
-            var service = await _serviceAppService.GetAll(cancellationToken);
-            ViewBag.Service = service;
+            var services = (await _serviceAppService.GetAll(cancellationToken)).Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
+            ViewBag.Services = services;
             return View(model);
         }
         [HttpPost]
@@ -189,9 +194,9 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var customer = _customerAppService.Get(userId, cancellationToken);
-           var customerId = customer.Id;
-            await _orderAppService.SelectBid(customerId,bidId, cancellationToken);
-           return RedirectToAction("Index");
+            var customerId = customer.Id;
+            await _orderAppService.SelectBid(customerId, bidId, cancellationToken);
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -202,13 +207,13 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
             var orderList = new List<OrdersAcceptedViewModel>();
             foreach (var item in order)
             {
-                var comment= await _commentAppService.GetByOrderId(item.Id, cancellationToken);
+                var comment = await _commentAppService.GetByOrderId(item.Id, cancellationToken);
                 var expert = await _expertAppService.Get(item.ExpertId, cancellationToken);
                 var orderViewModel = new OrdersAcceptedViewModel()
                 {
                     Id = item.Id,
                     Comment = comment.Discription,
-                    CommentCreatedTime=comment.CreatedAt,
+                    CommentCreatedTime = comment.CreatedAt,
                     CreatedAt = item.CreatedAt,
                     ServiceId = item.ServiceId,
                     ExpertUserName = expert.UserName,
@@ -220,14 +225,14 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddComment(int orderId,CancellationToken cancellationToken)
+        public async Task<IActionResult> AddComment(int orderId, CancellationToken cancellationToken)
         {
             var commentViewModel = new CommentInPutViewModel()
             {
                 OrderId = orderId,
                 Discription = string.Empty,
             };
-            
+
             return View(commentViewModel);
         }
 
@@ -245,7 +250,7 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
             ModelState.AddModelError(string.Empty, "ثیت دیدگاه را مجددا انجام دهید");
             return View(model);
         }
-     
+
     }
 
 }

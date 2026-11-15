@@ -41,9 +41,9 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
             _adminAppService = adminAppService;
-           _appFileStorageService = appFileStorageService;
+            _appFileStorageService = appFileStorageService;
             _appFileAppService = appFileAppService;
-           _fileTypeAppService = fileTypeAppService;
+            _fileTypeAppService = fileTypeAppService;
             _logger = logger;
         }
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -52,21 +52,30 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
             var users = await _adminAppService.GetAll(cancellationToken);
             _logger.LogInformation("List of users has read from database");
 
-
             var model = new List<UserViewModel>();
-            foreach (var user in users)
+            model = users.Select(user => new UserViewModel
             {
-                model.Add(new UserViewModel
-                {
-                    Name = user.UserName,
-                    Email = user.Email,
-                    Address = user.Address,
-                    Id = user.Id,
-                    PhoneNumber = user.PhoneNumber,
-                   Role=user.Role.ToString(),
+                Name = user.UserName,
+                Email = user.Email,
+                Address = user.Address,
+                Id = user.Id,
+                PhoneNumber = user.PhoneNumber,
+                Role = user.Role.ToString(),
+            }).ToList();
 
-                });
-            }
+            //foreach (var user in users)
+            //{
+            //    model.Add(new UserViewModel
+            //    {
+            //        Name = user.UserName,
+            //        Email = user.Email,
+            //        Address = user.Address,
+            //        Id = user.Id,
+            //        PhoneNumber = user.PhoneNumber,
+            //        Role = user.Role.ToString(),
+
+            //    });
+            //}
             _logger.LogTrace("finish method {methodName}", nameof(Index));
 
             return View(model);
@@ -162,7 +171,7 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(UpdateUserViewModel model, int id,CancellationToken cancellationToken)
+        public async Task<IActionResult> Update(UpdateUserViewModel model, int id, CancellationToken cancellationToken)
         {
             if (ModelState.IsValid)
             {
@@ -199,21 +208,18 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
                         ViewBag.Roles = await _roleManager.Roles.ToListAsync();
                         return View(model);
                     }
-                    if (model.File != null && model.DiscriptionFile!=null)
+                    if (model.File != null && model.DiscriptionFile != null)
                     {
                         await SaveFile(model.Id, model.Role.ToString(), model.File, model.DiscriptionFile, cancellationToken);
                     }
                 }
-                var role = await _userManager.GetRolesAsync(user);
+                var roles = await _userManager.GetRolesAsync(user);
                 if (update.Succeeded)
                 {
-                    if (model.Role == null || !model.Role.Contains(role.ToString())) ;
+                    await _userManager.RemoveFromRolesAsync(user, roles);
+                    if (model.Role != null && model.Role.Any())
                     {
-                        await _userManager.RemoveFromRoleAsync(user, role.ToString());
-                    }
-                    if (model.Role != null)
-                    {
-                        await _userManager.AddToRoleAsync(user, role.ToString());
+                        await _userManager.AddToRolesAsync(user, roles);
                         _logger.LogInformation("The user Update By Admin with id={id}", id);
                     }
                     return RedirectToAction("Index");
@@ -249,7 +255,7 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
                 _logger.LogTrace("start methode {action name}", nameof(Update));
                 var appUserDto = new AppUserDto()
                 {
-                   
+
                     Name = model.Name,
                     LastName = model.LastName,
                     Address = model.Address,
@@ -267,7 +273,7 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
                 }
                 _logger.LogInformation("The {user} Add By Admin with", nameof(model.UserName));
                 var result = await _adminAppService.Add(appUserDto, cancellationToken);
-                var user= await _userManager.FindByEmailAsync(model.Email);
+                var user = await _userManager.FindByEmailAsync(model.Email);
                 var userId = user.Id;
 
                 _logger.LogTrace("finish methode {action name}", nameof(Update));
@@ -281,7 +287,7 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
                     ViewBag.Roles = await _roleManager.Roles.ToListAsync();
                     return View(model);
                 }
-             await  SaveFile(userId,model.Role.ToString(),model.File,model.DiscriptionFile,cancellationToken);
+                await SaveFile(userId, model.Role.ToString(), model.File, model.DiscriptionFile, cancellationToken);
                 //var path = _appFileStorageService.CreatFolder(userId, model.Role.ToString());
                 //var userPath = _appFileStorageService.SaveFile(model.File, path);
                 //var fileTypeDto = new FileTypeDto()
@@ -304,7 +310,7 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
 
             return View(model);
         }
-        public async Task SaveFile(int userId, string role, IFormFile file, string discriptionFile,CancellationToken cancellationToken )
+        public async Task SaveFile(int userId, string role, IFormFile file, string discriptionFile, CancellationToken cancellationToken)
         {
             var path = _appFileStorageService.CreatFolder(userId, role);
             var userPath = _appFileStorageService.SaveFile(file, path);
@@ -313,10 +319,10 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
                 Extention = Path.GetExtension(path),
                 Name = file.Name,
             };
-            var fileTypeId = await _fileTypeAppService.Add(fileTypeDto, cancellationToken);
+            var fileTypeId = await _fileTypeAppService.GetOrAdd(fileTypeDto, cancellationToken);
             var appFileDto = new AppFileDto()
             {
-                Name =file.Name,
+                Name = file.Name,
                 Description = discriptionFile,
                 Path = path,
                 UserId = userId,

@@ -72,9 +72,9 @@ namespace App.EndPoint.Mvc.ShopUI.Areas.Customer.Controllers
                 var fileTypeDto = new FileTypeDto()
                 {
                     Extention = Path.GetExtension(pathFile),
-                    Name = model.File.Name,
+                    Name = model.File.ContentType,
                 };
-                var fileTypeId = await _fileTypeAppService.Add(fileTypeDto, cancellationToken);
+                var fileTypeId = await _fileTypeAppService.GetOrAdd(fileTypeDto, cancellationToken);
 
                 var appFileDto = new AppFileDto()
                 {

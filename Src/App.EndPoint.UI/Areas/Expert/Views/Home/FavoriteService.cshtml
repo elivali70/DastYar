@@ -1,0 +1,24 @@
+﻿@model ExpertFavoriteServiceViewModel
+<h2 class="mb-3 text-center text-bg-success p-3 ">
+    انتخاب علاقمندی سرویس های  کاربر @Model.UserId
+</h2>
+<form asp-area="Expert" asp-controller="Home" asp-action="FavoriteService" asp-route-id="@Model.UserId" method="post" >
+    <input type="hidden" asp-for="UserId" />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="ExpertId">  </label>
+        <input type="text" class="form-control" asp-for="ExpertId" />
+        <span asp-validation-for="ExpertId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="Services">  </label>
+        <select asp-for="SelectedServiceIds" asp-items="Model.Services" multiple class="form-control"></select>
+        <span asp-validation-for="Services" class="text-danger"></span>
+    </div>
+   
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success"> ذخیره</button>
+        <a class="btn btn-primary " asp-area="Expert" asp-controller="Home" asp-action="FavoriteService" asp-route-id="@Model.UserId"><i class="fas fa-arrow-right"></i>انتخاب سرویس مورد علاقه</a>
+        <a class="btn btn-primary " asp-area="Expert" asp-controller="Home" asp-action="Index"><i class="fas fa-arrow-right"></i>بازگشت</a>
+    </div>
+</form>

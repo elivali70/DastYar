@@ -3,6 +3,7 @@ using App.Domain.Core.User.Entities;
 using App.Domain.Core.User.Enums;
 using App.Infrastructure.DataBase.SQL.DbContext;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Domain.Core.User.Contracts.Repositories;
 
@@ -32,6 +33,7 @@ public class ExpertCommandRepository:IExpertCommandRepository
         user.SubmitDate = DateTime.Now;
         user.UserName = expertRegisterDto.UserName;
         user.Role = RoleEnum.ExpertRole;
+        
         var userResult = await _userManagere.CreateAsync(user, expertRegisterDto.Password);
         if (!userResult.Succeeded)
         {
@@ -60,8 +62,11 @@ public class ExpertCommandRepository:IExpertCommandRepository
             expert.LastName = expertDto.LastName;
             expert.PictureFileId = expertDto.PictureFileId;
             expert.UserName = expertDto.UserName;
-            var update = await _userManagere.UpdateAsync(expert);
-            return update;
+            var updateUser = await _userManagere.UpdateAsync(expert);
+            var updateExpert=await _appDbContext.Experts.SingleOrDefaultAsync(x=>x.UserId == expertDto.UserId);
+            updateExpert.User= await _userManagere.FindByIdAsync(expertDto.UserId.ToString());
+           await _appDbContext.SaveChangesAsync(cancellationToken);
+            return updateUser;
         }
         else
         {
