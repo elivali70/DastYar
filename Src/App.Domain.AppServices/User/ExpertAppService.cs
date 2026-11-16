@@ -50,5 +50,10 @@ namespace App.Domain.AppServices.User
         {
             await _expertService.Update(userId, name, phoneNumber, email, userName, address, fileId, cancellationToken);
         }
+
+        public async Task<ExpertDto> GetByExpertId(int? expertId, CancellationToken cancellationToken)
+        {
+            return await _expertService.GetByExpertId(expertId, cancellationToken);
+        }
     }
 }

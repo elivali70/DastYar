@@ -5,6 +5,7 @@ using App.Domain.Core.User.Entities;
 using App.EndPoint.UI.Areas.Admin.Models.AppFile;
 using App.EndPoint.UI.Areas.Customer.Models.UpdateProfile;
 using App.EndPoint.UI.Areas.Expert.Models.Home;
+using App.EndPoint.UI.Areas.Expert.Models.UpdateProfile;
 using App.EndPoint.UI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

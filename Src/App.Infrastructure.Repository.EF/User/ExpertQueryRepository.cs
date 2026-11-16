@@ -27,7 +27,6 @@ public class ExpertQueryRepository:IExpertQueryRepository
             SubmitDate = s.User.SubmitDate,
             UserName = s.User.UserName,
             IsActive = s.User.IsActive,
-            Services=s.Services,
         }).ToListAsync(cancellationToken);
         return expertUsers;
     }
@@ -46,7 +45,6 @@ public class ExpertQueryRepository:IExpertQueryRepository
             SubmitDate = s.User.SubmitDate,
             UserName = s.User.UserName,
             IsActive = s.User.IsActive,
-            Services = s.Services,
         }).SingleOrDefaultAsync(cancellationToken);
         return expertUser;
     }
@@ -65,7 +63,25 @@ public class ExpertQueryRepository:IExpertQueryRepository
             SubmitDate = s.User.SubmitDate,
             UserName = s.User.UserName,
             IsActive = s.User.IsActive,
-            Services = s.Services,
+        }).SingleOrDefaultAsync(cancellationToken);
+        return expertUser;
+    }
+
+    public async Task<ExpertDto> GetByExpertId(int? expertId, CancellationToken cancellationToken)
+    {
+        var expertUser = await _appDbContext.Experts.Where(x => !x.User.IsDeleted && x.Id==expertId).Select(s => new ExpertDto()
+        {
+            Id = s.Id,
+            UserId = s.User.Id,
+            Name = s.User.Name,
+            Email = s.User.Email,
+            Address = s.User.Address,
+            PhoneNumber = s.User.PhoneNumber,
+            LastName = s.User.LastName,
+            PictureFileId = s.User.PictureFileId,
+            SubmitDate = s.User.SubmitDate,
+            UserName = s.User.UserName,
+            IsActive = s.User.IsActive,
         }).SingleOrDefaultAsync(cancellationToken);
         return expertUser;
     }

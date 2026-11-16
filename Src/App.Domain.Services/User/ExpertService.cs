@@ -55,6 +55,11 @@ namespace App.Domain.Services.User
             return expert;
         }
 
+        public async Task<ExpertDto> GetByExpertId(int? expertId, CancellationToken cancellationToken)
+        {
+            return await _expertQueryRepository.GetByExpertId( expertId, cancellationToken);
+        }
+
         public async Task<IdentityResult> Register(ExpertRegisterDto expertRegisterDto, CancellationToken cancellationToken)
         {
            return await _expertCommandRepository.Add(expertRegisterDto,cancellationToken);

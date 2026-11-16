@@ -2,6 +2,7 @@
 using App.Domain.Core.AppFile.Dtos;
 using App.Domain.Core.Order.Dtos;
 using App.Domain.Core.Order.Enities;
+using App.Domain.Core.Order.Enums;
 using App.Infrastructure.DataBase.SQL.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client.NativeInterop;
@@ -66,6 +67,23 @@ public class OrderCommandRepository : IOrderCommandRepository
         else
         {
             throw new Exception($"order with Id={id} dosnt exist");
+        }
+    }
+
+    public async Task SelectOrder(int expertId, int orderId, CancellationToken cancellationToken)
+    {
+      
+        var order = await _appDbContext.Orders.Where(x=>x.ExpertId==expertId&& x.Id==orderId && !x.IsDeleted).SingleOrDefaultAsync(cancellationToken);
+        if (order != null)
+        {
+           order.OrderStatus=OrderStatusEnum.WaitingForSpecialistArrival;
+
+            await _appDbContext.SaveChangesAsync(cancellationToken);
+        }
+        else
+        {
+            throw new Exception($"order with Id={orderId} dosnt exist");
+
         }
     }
 }

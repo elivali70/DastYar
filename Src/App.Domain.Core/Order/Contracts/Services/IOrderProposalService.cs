@@ -10,5 +10,6 @@ namespace App.Domain.Core.Order.Contracts.Services
         Task<List<OrderProposalDto>> GetAll(CancellationToken cancellationToken);
         Task<OrderProposalDto?> GetByOrderId(int orderId, CancellationToken cancellationToken);
         Task Update(OrderProposalDto orderProposalDto,CancellationToken cancellationToken);
+        Task AcceptOrder(int expertId, int orderId, int suggestedPrice, CancellationToken cancellationToken);
     }
 }

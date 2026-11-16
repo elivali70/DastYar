@@ -96,6 +96,8 @@ builder.Services.AddScoped<IOrderProposalService, OrderProposalService>();
 #region Service
 builder.Services.AddScoped<IExpertFavoritServiceCommandRepository, ExpertFavoritServiceCommandRepository>();
 builder.Services.AddScoped<IExpertFavoritServiceQueryRepository, ExpertFavoritServiceQueryRepository>();
+builder.Services.AddScoped<IExpertFavoriteServiceAppService, ExpertFavoriteServiceAppService>();
+builder.Services.AddScoped<IExpertFavoriteServiceService, ExpertFavoriteServiceService>();
 builder.Services.AddScoped<IServiceCommandRepository, ServiceCommandRepository>();
 builder.Services.AddScoped<IServiceQueryRepository, ServiceQueryRepository>();
 builder.Services.AddScoped<IServiceFileCommandRepository, ServiceFileCommandRepository>();

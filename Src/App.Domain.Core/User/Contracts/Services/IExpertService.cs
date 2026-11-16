@@ -14,5 +14,6 @@ namespace App.Domain.Core.User.Contracts.Services
         Task<List<ExpertDto>> GetAll(CancellationToken cancellationToken);
         Task Update(int userId, string name, string phoneNumber, string email, string userName, string address, int fileId, CancellationToken cancellationToken);
         Task AddFavoriteServices(int expertId, int serviceId, CancellationToken cancellationToken);
+         Task<ExpertDto> GetByExpertId(int? expertId, CancellationToken cancellationToken);
     }
 }

@@ -57,7 +57,7 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
             foreach (var item in order)
             {
                 var orderProposal = await _orderProposalAppService.GetByOrderId(item.Id, cancellationToken);
-                var expert = await _expertAppService.Get(item.ExpertId, cancellationToken);
+                var expert = await _expertAppService.GetByExpertId(item.ExpertId, cancellationToken);
                 var orderViewModel = new OrderOutPutCustomeViewModel()
                 {
                     CustomerId = customerId,
@@ -208,7 +208,7 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
             foreach (var item in order)
             {
                 var comment = await _commentAppService.GetByOrderId(item.Id, cancellationToken);
-                var expert = await _expertAppService.Get(item.ExpertId, cancellationToken);
+                var expert = await _expertAppService.GetByExpertId(item.ExpertId, cancellationToken);
                 var orderViewModel = new OrdersAcceptedViewModel()
                 {
                     Id = item.Id,

@@ -3,6 +3,7 @@ using App.Domain.Core.AppFile.Dtos;
 using App.Domain.Core.Order.Dtos;
 using App.Domain.Core.Order.Enities;
 using App.Domain.Core.Order.Enums;
+using App.Domain.Core.User.Entities;
 using App.Infrastructure.DataBase.SQL.DbContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -127,6 +128,27 @@ public class OrderQueryRepository : IOrderQueryRepository
             CreatedAt = s.CreatedAt,
             PrefferedDateTime = s.PrefferedDateTime,
             ExpertId = s.ExpertId,
+            Discription = s.Discription,
+        }).ToListAsync(cancellationToken);
+        return oreders;
+    }
+
+    public async Task<List<OpenOrderOutPutDto>> GetOpenOrders(int expertId, int serviceId, CancellationToken cancellationToken)
+    {
+        var oreders = await _appDbContext.Orders.Where(x => !x.IsDeleted && x.ExpertId == expertId &&
+        x.OrderStatus == OrderStatusEnum.WaitingForSpecialistSelection && x.ServiceId==serviceId).Select(s => new OpenOrderOutPutDto()
+        {
+            OrderId = s.Id,
+            ServiceName = s.Service.Name,
+            BasePrice = s.BasePrice,
+            OrderStatus = s.OrderStatus,
+            CustomerUserName = s.Customer.User.UserName,
+            CustomerAddress = s.Customer.User.Address,
+            CustomerLastName = s.Customer.User.LastName,
+            CustomerPhoneNumber = s.Customer.User.PhoneNumber,
+            CreatedAt = s.CreatedAt,
+            PrefferedDateTime = s.PrefferedDateTime,
+            ExpertUserName = s.Expert.User.UserName,
             Discription = s.Discription,
         }).ToListAsync(cancellationToken);
         return oreders;

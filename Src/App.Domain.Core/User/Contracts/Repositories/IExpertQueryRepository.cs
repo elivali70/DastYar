@@ -7,4 +7,5 @@ public interface IExpertQueryRepository
     Task<List<ExpertDto>> GetAll(CancellationToken cancellationToken);
     Task<ExpertDto?> Get(int userId, CancellationToken cancellationToken);
     Task<ExpertDto?> Get(string userName, CancellationToken cancellationToken);
+    Task<ExpertDto> GetByExpertId(int? expertId, CancellationToken cancellationToken);
 }

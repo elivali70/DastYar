@@ -8,4 +8,5 @@ public interface IOrderQueryRepository
     Task<List<OrderDto?>> GetAllForCustomer(int customerId, CancellationToken cancellationToken);
     Task<OrderDto?> GetForCustomer(int customerId, int orderId, CancellationToken cancellationToken);
     Task<List<OrderDto?>> GetAccepted(int customerId, CancellationToken cancellationToken);
+    Task<List<OpenOrderOutPutDto>> GetOpenOrders(int expertId, int serviceId, CancellationToken cancellationToken);
 }

@@ -5,6 +5,7 @@ using order=App.Domain.Core.Order.Enities;
 using App.Infrastructure.DataBase.SQL.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client.NativeInterop;
+using App.Domain.Core.Order.Enums;
 
 public class OrderProposalCommandRepository: IOrderProposalCommandRepository
 {
@@ -65,6 +66,24 @@ public class OrderProposalCommandRepository: IOrderProposalCommandRepository
         else
         {
             throw new Exception($"orderProposal with Id={id} dosnt exist");
+        }
+    }
+    public async Task AcceptOrder(int expertId, int orderId,int suggestedPrice ,CancellationToken cancellationToken)
+    {
+        var orderProposal = await _appDbContext.OredeProposals.SingleOrDefaultAsync(x => x.OrderId == orderId && !x.IsDeleted);
+        if (orderProposal != null)
+        {
+            orderProposal.ProposalStatus = ProposalStatusEnum.Accepted;
+            orderProposal.SuggestedPrice = suggestedPrice;
+            orderProposal.ExpertId = expertId;
+           
+
+            await _appDbContext.SaveChangesAsync(cancellationToken);
+        }
+        else
+        {
+            throw new Exception($"orderProposal with Id={orderId} dosnt exist");
+
         }
     }
 }

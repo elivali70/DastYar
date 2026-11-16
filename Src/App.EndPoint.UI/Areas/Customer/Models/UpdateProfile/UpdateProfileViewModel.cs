@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace App.EndPoint.UI.Areas.Customer.Models.UpdateProfile
 {
-    public class UpdateExpertProfileViewModel
+    public class UpdateProfileViewModel
     {
         [ReadOnly(true)]
         [Display(Name = "شناسه کاربر")]

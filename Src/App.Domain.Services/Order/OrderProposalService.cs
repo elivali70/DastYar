@@ -32,5 +32,9 @@ namespace App.Domain.Services.Order
         {
             await _orderProposalCommandRepository.Update(orderProposalDto, cancellationToken);
         }
+        public async Task AcceptOrder(int expertId, int orderId, int suggestedPrice, CancellationToken cancellationToken)
+        {
+            await _orderProposalCommandRepository.AcceptOrder(expertId, orderId,suggestedPrice ,cancellationToken);
+        }
     }
 }

@@ -38,4 +38,19 @@ public class ExpertFavoritServiceQueryRepository:IExpertFavoritServiceQueryRepos
         }).SingleOrDefaultAsync(cancellationToken);
         return expertFavoriteService;
     }
+
+    public async Task<List<ServiceDto>> GetServices(int expertId, CancellationToken cancellationToken)
+    {
+       var services = await _appDbContext.ExpertFavoritServices.Where(x=>x.ExpertId==expertId && !x.IsDeleted).Select(s=> new ServiceDto()
+       {
+           Id = s.ServiceId,
+           Name=s.Service.Name,
+           CategoryId=s.Service.CategoryId,
+           BasePrice=s.Service.BasePrice,
+           CreatedAt=s.Service.CreatedAt,
+           Disctiption=s.Service.Disctiption,
+           
+       }).ToListAsync(cancellationToken);
+        return services;
+    }
 }

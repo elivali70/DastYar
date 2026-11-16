@@ -76,5 +76,13 @@ namespace App.Domain.Services.Order
         {
             await _orderCommandRepository.Update(orderDto, cancellationToken);
         }
+         public async Task<List<OpenOrderOutPutDto>> GetOpenOrders(int expertId, int serviceId,CancellationToken cancellationToken)
+        {
+            return await _orderQueryRepository.GetOpenOrders(expertId, serviceId, cancellationToken);
+        }
+        public async Task SelectOrder(int expertId, int orderId, CancellationToken cancellationToken)
+        {
+            await _orderCommandRepository.SelectOrder(expertId, orderId, cancellationToken);
+        }
     }
 }

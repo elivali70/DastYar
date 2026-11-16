@@ -173,7 +173,7 @@ namespace App.EndPoint.UI.Areas.Admin.Controllers
             var order = await _orderAppService.Get(id, cancellationToken);
             var customer = await _customerAppService.Get(order.CustomerId, cancellationToken);
             var customerUserName = customer.UserName;
-            var expert = await _expertAppService.Get(order.ExpertId, cancellationToken);
+            var expert = await _expertAppService.GetByExpertId(order.ExpertId, cancellationToken);
             var expertUserName = expert.UserName;
             var service = await _serviceAppService.Get(order.ServiceId, cancellationToken);
             var serviceName = service.Name;

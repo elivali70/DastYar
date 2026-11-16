@@ -2,6 +2,7 @@
 using App.Domain.Core.Order.Contracts.Services;
 using App.Domain.Core.Order.Dtos;
 using App.Domain.Core.Order.Enums;
+using App.Domain.Core.Service.Contracts.Services;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -14,14 +15,17 @@ namespace App.Domain.AppServices.Order
         private readonly IOrderService _orderService;
         private readonly IBidService _bidService;
         private readonly IOrderProposalService _orderProposalService;
+        private readonly IExpertFavoriteServiceService _expertFavoriteServiceService;
 
         public OrderAppService(IOrderService orderService,
             IBidService bidService,
-            IOrderProposalService orderProposalService)
+            IOrderProposalService orderProposalService,
+            IExpertFavoriteServiceService expertFavoriteServiceService)
         {
             _orderService = orderService;
             _bidService = bidService;
             _orderProposalService = orderProposalService;
+            expertFavoriteServiceService = expertFavoriteServiceService;
         }
         public async Task<int> Add(OrderDto orderDto, CancellationToken cancellationToken)
         {
@@ -48,9 +52,9 @@ namespace App.Domain.AppServices.Order
             return await _orderService.Search(keyWord, cancellationToken);
         }
 
-        public Task<List<OrderDto>> GetAll(CancellationToken cancellationToken)
+        public async Task<List<OrderDto>> GetAll(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return await _orderService.GetAll(cancellationToken);
         }
 
         public async Task<List<OrderDto?>> GetAllForCustomer(int customerId, CancellationToken cancellationToken)
@@ -107,6 +111,26 @@ namespace App.Domain.AppServices.Order
         public async Task Update(OrderDto orderDto, CancellationToken cancellationToken)
         {
             await _orderService.Update(orderDto, cancellationToken);
+        }
+
+        public async Task<List<OpenOrderOutPutDto>> GetOpenOrders(int expertId, CancellationToken cancellationToken)
+        {
+            var favoriteServices= await _expertFavoriteServiceService.GetServices(expertId, cancellationToken);
+            var orders= new List<OpenOrderOutPutDto>();
+            foreach (var service in favoriteServices)
+            {
+                var order = await _orderService.GetOpenOrders(expertId, service.Id, cancellationToken);
+                foreach (var item in order)
+                {
+                    orders.Add(item);
+                }
+            }
+            return orders;
+        }
+        public async Task SelectOrder(int expertId,int orderId, int suggestedPrice, CancellationToken cancellationToken)
+        {
+            await _orderService.SelectOrder(expertId, orderId, cancellationToken);
+            await _orderProposalService.AcceptOrder(expertId, orderId, suggestedPrice,cancellationToken);
         }
     }
 }

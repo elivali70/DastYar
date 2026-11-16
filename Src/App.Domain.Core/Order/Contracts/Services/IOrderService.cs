@@ -19,5 +19,7 @@ namespace App.Domain.Core.Order.Contracts.Services
         Task<OrderDto?> GetForCustomer(int customerId, int orderId, CancellationToken cancellationToken);
         Task<List<OrderDto>?> Search(string? keyWord, CancellationToken cancellationToken);
         Task<int> Set(int CustomerId, string Discription, DateTime PrefferedDateTime, int ServiceId, CancellationToken cancellationToken);
+        Task<List<OpenOrderOutPutDto>> GetOpenOrders(int expertId, int serviceId, CancellationToken cancellationToken);
+        Task SelectOrder(int expertId, int orderId, CancellationToken cancellationToken);
     }
 }
