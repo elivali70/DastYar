@@ -1,5 +1,6 @@
 ﻿using App.Domain.Core.Order.Contracts.Services;
 using App.Domain.Core.Order.Dtos;
+using App.Domain.Core.Order.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +16,19 @@ namespace App.Domain.Services.Order
         {
             _bidCommandRepository = bidCommandRepository;
             _bidQueryRepository = bidQueryRepository;
+        }
+
+        public async Task<int> Add(int expertId, int orderId, int suggestedPrice, CancellationToken cancellationToken)
+        {
+            var bidDto = new BidDto()
+            {
+                CreatedAt = DateTime.Now,
+                ExpertId = expertId,
+                OrderId = orderId,
+                SuggestedPrice = suggestedPrice,
+                ProposalStatus = ProposalStatusEnum.Pending,
+            };
+             return await _bidCommandRepository.Add(bidDto, cancellationToken);
         }
 
         public async Task Delete(int id, CancellationToken cancellationToken)
@@ -35,6 +49,11 @@ namespace App.Domain.Services.Order
         public async Task<List<BidDto>> GetAllByOrderId(int orderId, CancellationToken cancellationToken)
         {
            return await _bidQueryRepository.GetAllByOrderId(orderId, cancellationToken);
+        }
+
+        public async Task<List<BidDto>> GetMyBids(int expertId, CancellationToken cancellationToken)
+        {
+            return await _bidQueryRepository.GetAll(expertId, cancellationToken);
         }
 
         public async Task<List<BidDto>> Search(string keyWord, CancellationToken cancellationToken)

@@ -1,0 +1,15 @@
+﻿@model int 
+<h2 class="mb-3 text-center text-bg-success p-3 ">
+   کدرهگیری پیشتهاد قیمت
+</h2>
+
+    <div class="mb-3">
+    <label class="form-label"> شناسه پیشنهاد قیمت  </label>
+    <label class="form-label"> @Model  </label>
+    </div>
+  
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success"> ذخیره</button>
+        <a class="btn btn-primary " asp-area="Expert" asp-controller="Order" asp-action="OpenOrderList"><i class="fas fa-arrow-right"></i>بازگشت</a>
+    </div>

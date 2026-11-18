@@ -30,9 +30,9 @@ namespace App.Domain.AppServices.Order
             return await _commentService.GetByOrderId(orderId,cancellationToken);
         }
 
-        public async Task Add(int customerId, int OrderId, string discription, CancellationToken cancellationToken)
+        public async Task Add(int userId, int OrderId, string discription, CancellationToken cancellationToken)
         {
-            await _commentService.Add(customerId, OrderId, discription, cancellationToken);
+            await _commentService.Add(userId, OrderId, discription, cancellationToken);
         }
     }
 }

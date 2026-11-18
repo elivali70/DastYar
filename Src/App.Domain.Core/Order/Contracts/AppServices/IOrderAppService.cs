@@ -21,6 +21,6 @@ namespace App.Domain.Core.Order.Contracts.AppServices
        Task<int> Set(int customerId,string Discription,DateTime PrefferedDateTime,int ServiceId,CancellationToken cancellationToken);
         Task SelectBid(int customerId,int bidId,CancellationToken cancellationToken);
        Task<List<OpenOrderOutPutDto>> GetOpenOrders(int expertId,CancellationToken cancellationToken);
-        Task SelectOrder(int expertId, int orderId,int suggestedPrice , CancellationToken cancellationToken);
+        Task<int> SelectOrder(int expertId, int orderId,int suggestedPrice , CancellationToken cancellationToken);
     }
 }

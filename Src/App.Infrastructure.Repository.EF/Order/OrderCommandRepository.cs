@@ -77,7 +77,6 @@ public class OrderCommandRepository : IOrderCommandRepository
         if (order != null)
         {
            order.OrderStatus=OrderStatusEnum.WaitingForSpecialistArrival;
-
             await _appDbContext.SaveChangesAsync(cancellationToken);
         }
         else

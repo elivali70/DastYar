@@ -13,6 +13,9 @@ namespace App.Domain.Core.Order.Contracts.Services
         Task<BidDto> Get(int id, CancellationToken cancellationToken);
         Task Update(BidDto bidDto, CancellationToken cancellationToken);
         Task<List<BidDto>> GetAllByOrderId(int orderId, CancellationToken cancellationToken);
+        Task<int> Add(int expertId, int orderId, int suggestedPrice, CancellationToken cancellationToken);
+        Task<List<BidDto>> GetMyBids(int expertId, CancellationToken cancellationToken);
+
 
     }
 }

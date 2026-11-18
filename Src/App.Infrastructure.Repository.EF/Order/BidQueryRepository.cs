@@ -82,4 +82,18 @@ public class BidQueryRepository:IBidQueryRepository
         }).ToListAsync(cancellationToken);
         return bids;
     }
+
+    public async Task<List<BidDto>> GetAll(int expertId, CancellationToken cancellationToken)
+    {
+        var bids = await _appDbContext.Bids.Where(x => !x.IsDeleted && x.ExpertId == expertId).Select(s => new BidDto()
+        {
+            Id = s.Id,
+            SuggestedPrice = s.SuggestedPrice,
+            ExpertId = s.ExpertId,
+            CreatedAt = s.CreatedAt,
+            OrderId = s.OrderId,
+            ProposalStatus = s.ProposalStatus,
+        }).ToListAsync(cancellationToken);
+        return bids;
+    }
 }

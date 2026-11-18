@@ -91,11 +91,13 @@ namespace App.EndPoint.UI.Areas.Expert.Controllers
 
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var expert = await _expertAppService.Get(userId, cancellationToken);
-           await _orderAppService.SelectOrder(expert.Id,model.OrderId,model.SuggestedPrice,cancellationToken);
-            return RedirectToAction(nameof(OpenOrderList));
+            var bidId=  await _orderAppService.SelectOrder(expert.Id,model.OrderId,model.SuggestedPrice,cancellationToken);
+                return View("BidId", bidId);
             }
             return View(model);
         }
+
+       
 
     }
 

@@ -73,7 +73,7 @@ public class OrderProposalCommandRepository: IOrderProposalCommandRepository
         var orderProposal = await _appDbContext.OredeProposals.SingleOrDefaultAsync(x => x.OrderId == orderId && !x.IsDeleted);
         if (orderProposal != null)
         {
-            orderProposal.ProposalStatus = ProposalStatusEnum.Accepted;
+            orderProposal.ProposalStatus = ProposalStatusEnum.Pending;
             orderProposal.SuggestedPrice = suggestedPrice;
             orderProposal.ExpertId = expertId;
            

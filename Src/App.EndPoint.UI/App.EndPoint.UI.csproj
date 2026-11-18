@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Expert\Models\Bid\" />
     <Folder Include="wwwroot\pics\" />
     <Folder Include="wwwroot\upload\product\5\" />
     <Folder Include="wwwroot\videos\" />

@@ -30,7 +30,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">پروفایل مشتری </div>
+                <div class="sidebar-brand-text mx-3">پروفایل متخصص </div>
             </a>
 
             <!-- Divider -->
@@ -61,27 +61,50 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">منوی پروفایل</h6>
-                        <a class="collapse-item" asp-area="Customer" asp-controller="Home" asp-action="UpdateProfile">ویرایش پروفایل</a>
-                        <a class="collapse-item" asp-area="Customer" asp-controller="Home" asp-action="ChangPassword">رمز عبور</a>
+                        <a class="collapse-item" asp-area="Expert" asp-controller="Home" asp-action="UpdateProfile">ویرایش پروفایل</a>
                     </div>
                 </div>
             </li>
             <hr class="sidebar-divider">
 
             <div class="sidebar-heading">
-                مدیریت سفارش ها
+                مدیریت پیشتهاد ها
             </div>
            
             <li class="nav-item">
-                <a class="nav-link" class="collapse-item" asp-area="Customer" asp-controller="Order" asp-action="Create">
+                <a class="nav-link" class="collapse-item" asp-area="Expert" asp-controller="Bid" asp-action="MyBids">
                     <i class="fas fa-fw fa-trademark"></i>
                     <span> ثبت سفارش </span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" class="collapse-item" asp-area="Customer" asp-controller="Order" asp-action="AcceptedOrders">
+                <a class="nav-link" class="collapse-item" asp-area="Expert" asp-controller="Bid" asp-action="MyBids">
                     <i class="fas fa-fw fa-trademark"></i>
-                    <span>  مشاهده سفارش های قیلی </span>
+                    <span>  مشاهده پیشنهاد های قیلی </span>
+                </a>
+            </li>
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading">
+               علاقمندی ها
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" class="collapse-item" asp-area="Expert" asp-controller="Home" asp-action="FavoriteService">
+                    <i class="fas fa-fw fa-trademark"></i>
+                    <span> سرویس های مورد علاقه </span>
+                </a>
+            </li>
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading">
+               مدیریت صفارش ها
+            </div>
+
+            <li class="nav-item">
+                <a class="nav-link" class="collapse-item" asp-area="Expert" asp-controller="order" asp-action="OpenOrderList">
+                    <i class="fas fa-fw fa-trademark"></i>
+                    <span> سفارش های باز مشتریان </span>
                 </a>
             </li>
            
@@ -110,10 +133,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
-                                <a class="dropdown-item" asp-area="Customer" asp-controller="Home" asp-action="ChangePassword">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    تغییر رمز عیور
-                                </a>
+                               
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" asp-controller="Account" asp-action="Logout" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

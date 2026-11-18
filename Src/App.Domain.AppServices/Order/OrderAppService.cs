@@ -20,7 +20,8 @@ namespace App.Domain.AppServices.Order
         public OrderAppService(IOrderService orderService,
             IBidService bidService,
             IOrderProposalService orderProposalService,
-            IExpertFavoriteServiceService expertFavoriteServiceService)
+            IExpertFavoriteServiceService expertFavoriteServiceService
+           )
         {
             _orderService = orderService;
             _bidService = bidService;
@@ -127,10 +128,12 @@ namespace App.Domain.AppServices.Order
             }
             return orders;
         }
-        public async Task SelectOrder(int expertId,int orderId, int suggestedPrice, CancellationToken cancellationToken)
+        public async Task<int> SelectOrder(int expertId,int orderId, int suggestedPrice, CancellationToken cancellationToken)
         {
             await _orderService.SelectOrder(expertId, orderId, cancellationToken);
             await _orderProposalService.AcceptOrder(expertId, orderId, suggestedPrice,cancellationToken);
+           var bidId= await _bidService.Add(expertId, orderId,suggestedPrice,cancellationToken);
+            return bidId;
         }
     }
 }
