@@ -65,19 +65,29 @@ namespace App.EndPoint.UI.Areas.Expert.Controllers
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var expert = await _expertAppService.Get(userId, cancellationToken);
+            if (expert == null)
+                return Forbid();
             var bid = await _bidAppService.Get(model.Id, cancellationToken);
-            if (bid.ProposalStatus == ProposalStatusEnum.Accepted)
+            if (bid == null)
+                return NotFound();
+            if (bid.ExpertId != expert.Id)
+                return Forbid();
+            if (bid.ProposalStatus == ProposalStatusEnum.Pending)
             {
-                var message = "You Cant Delete This Bid";
-                return View("DeleteBid", message);
+                TempData["ErrorMessage"] = "فقط پیشنهادهای در انتظار را می‌توانید حذف کنید.";
+
+                return RedirectToAction(nameof(MyBids));
             }
             else
             {
-                await _bidAppService.DeleteSuggestedBid(expert.Id, model.Id,model.OrderId, cancellationToken);
-                var message2 = $"You Deleted Bid with Id={model.Id}";
-                return View("DeleteBid", message2);
+                await _bidAppService.DeleteSuggestedBid( expert.Id, bid.Id,bid.OrderId, cancellationToken);
+
+                TempData["SuccessMessage"] ="پیشنهاد شما با موفقیت پس گرفته شد.";
+
+                return RedirectToAction(nameof(MyBids));
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> Comment(BidsOutPutViewModel model, CancellationToken cancellationToken)
         {

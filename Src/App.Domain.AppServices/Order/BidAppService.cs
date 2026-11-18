@@ -11,13 +11,10 @@ namespace App.Domain.AppServices.Order
     public class BidAppService : IBidAppService
     {
         private readonly IBidService _bidService;
-        private readonly IOrderProposalService _orderProposalService;
 
-        public BidAppService(IBidService bidService,
-            IOrderProposalService orderProposalService)
+        public BidAppService(IBidService bidService)
         {
             _bidService = bidService;
-            _orderProposalService = orderProposalService;
         }
 
         public async Task Delete(int id, CancellationToken cancellationToken)
@@ -55,31 +52,17 @@ namespace App.Domain.AppServices.Order
         public async Task DeleteSuggestedBid(int expertId, int bidId, int orderId,CancellationToken cancellationToken)
         {
             var bid = await _bidService.Get(bidId, cancellationToken);
+            if (bid == null)
+                throw new Exception("Bid does not exist.");
+            if (bid.ExpertId != expertId)
+                throw new UnauthorizedAccessException( "You cannot withdraw another expert's bid.");
+            if (bid.OrderId != orderId)
+                throw new Exception("Invalid order.");
+            if (bid.ProposalStatus != ProposalStatusEnum.Pending)
+                throw new Exception("Only pending bids can be withdrawn.");
 
-            var bidDto = new BidDto()
-            {
-                CreatedAt = bid.CreatedAt,
-                ExpertId = bid.ExpertId,
-                Id = bid.Id,
-                OrderId = bid.OrderId,
-                ProposalStatus = ProposalStatusEnum.Withdrawn,
-                SuggestedPrice = bid.SuggestedPrice,
-            };
-            await _bidService.Update(bidDto, cancellationToken);
-            var orderProposal= await _orderProposalService.GetByOrderId(orderId, cancellationToken);
-            var orderProposalDto = new OrderProposalDto()
-            {
-                CreatedAt = orderProposal.CreatedAt,
-                Discription = orderProposal.Discription,
-                DurationTime = orderProposal.DurationTime,
-                ExpertId = orderProposal.ExpertId,
-                OrderId = orderProposal.OrderId,
-                StatrtedDateTime = orderProposal.StatrtedDateTime,
-                Id = orderProposal.Id,
-                ProposalStatus = ProposalStatusEnum.Withdrawn,
-                SuggestedPrice = orderProposal.SuggestedPrice,
-            };
-            await _orderProposalService.Update(orderProposalDto, cancellationToken);
+            bid.ProposalStatus = ProposalStatusEnum.Withdrawn;
+            await _bidService.Update(bid, cancellationToken);
 
         }
     }

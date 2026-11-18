@@ -14,7 +14,6 @@ namespace App.Domain.AppServices.Order
     {
         private readonly IOrderService _orderService;
         private readonly IBidService _bidService;
-        private readonly IOrderProposalService _orderProposalService;
         private readonly IExpertFavoriteServiceService _expertFavoriteServiceService;
 
         public OrderAppService(IOrderService orderService,
@@ -25,8 +24,7 @@ namespace App.Domain.AppServices.Order
         {
             _orderService = orderService;
             _bidService = bidService;
-            _orderProposalService = orderProposalService;
-            expertFavoriteServiceService = expertFavoriteServiceService;
+            _expertFavoriteServiceService = expertFavoriteServiceService;
         }
         public async Task<int> Add(OrderDto orderDto, CancellationToken cancellationToken)
         {
@@ -70,38 +68,50 @@ namespace App.Domain.AppServices.Order
 
         public async Task SelectBid(int customerId, int bidId, CancellationToken cancellationToken)
         {
-            var bid = await _bidService.Get(bidId, cancellationToken);
-            var order = await _orderService.GetForCustomer(customerId, bid.OrderId, cancellationToken);
-            if (order != null)
+            var selectedBid = await _bidService.Get(bidId, cancellationToken);
+
+            if (selectedBid == null)
+                throw new Exception("Bid does not exist.");
+
+            var order = await _orderService.GetForCustomer( customerId,selectedBid.OrderId, cancellationToken);
+
+            if (order == null)
+                throw new Exception("Order does not belong to this customer.");
+
+            if (order.OrderStatus != OrderStatusEnum.WaitingForProposals ||order.ExpertId != null)
             {
-                var bids = await _bidService.GetAllByOrderId(bid.OrderId, cancellationToken);
-                foreach (var item in bids)
-                {
-                    if (item.Id == bidId)
-                    {
-                        bid.ProposalStatus = ProposalStatusEnum.Accepted;
-                        await _bidService.Update(bid, cancellationToken);
-                        var expertId = bid.ExpertId;
-                        var orderProposal = await _orderProposalService.GetByOrderId(bid.OrderId, cancellationToken);
-                        orderProposal.ProposalStatus = ProposalStatusEnum.Accepted;
-                        order.ExpertId = expertId;
-                        order.OrderStatus=OrderStatusEnum.WaitingForSpecialistArrival;
-                        bid.SuggestedPrice = orderProposal.SuggestedPrice;
-                        await _orderService.Update(order, cancellationToken);
-                        await _orderProposalService.Update(orderProposal, cancellationToken);
-
-                    }
-                    else
-                    {
-                        order.OrderStatus=OrderStatusEnum.Cancelled;
-                        await _bidService.Update(bid, cancellationToken);
-                        var orderProposal = await _orderProposalService.GetByOrderId(bid.OrderId, cancellationToken);
-                        orderProposal.ProposalStatus = ProposalStatusEnum.Rejected;
-                        await _orderProposalService.Update(orderProposal, cancellationToken);
-
-                    }
-                }
+                throw new Exception("This order has already been processed.");
             }
+
+            if (selectedBid.ProposalStatus != ProposalStatusEnum.Pending)
+                throw new Exception("This bid cannot be selected.");
+
+            // دریافت تمام پیشنهادهای سفارش
+            var bids = await _bidService.GetAllByOrderId(selectedBid.OrderId, cancellationToken);
+
+            foreach (var bid in bids)
+            {
+                if (bid.ProposalStatus != ProposalStatusEnum.Pending)
+                    continue;
+
+                if (bid.Id == selectedBid.Id)
+                {
+                    bid.ProposalStatus = ProposalStatusEnum.Accepted;
+                }
+                else
+                {
+                    bid.ProposalStatus = ProposalStatusEnum.Rejected;
+                }
+
+                await _bidService.Update(bid, cancellationToken);
+            }
+
+            // اختصاص سفارش به متخصص انتخاب‌شده
+            order.ExpertId = selectedBid.ExpertId;
+
+            order.OrderStatus = OrderStatusEnum.WaitingForSpecialistArrival;
+
+            await _orderService.Update(order, cancellationToken);
         }
 
         public async Task<int> Set(int customerId, string Discription, DateTime PrefferedDateTime, int ServiceId, CancellationToken cancellationToken)
@@ -120,20 +130,44 @@ namespace App.Domain.AppServices.Order
             var orders= new List<OpenOrderOutPutDto>();
             foreach (var service in favoriteServices)
             {
-                var order = await _orderService.GetOpenOrders(expertId, service.Id, cancellationToken);
-                foreach (var item in order)
-                {
-                    orders.Add(item);
-                }
+                var serviceOrders = await _orderService.GetOpenOrders(expertId, service.Id, cancellationToken);
+                orders.AddRange(serviceOrders);
             }
-            return orders;
+            return orders.DistinctBy(x => x.OrderId).ToList(); ;
         }
         public async Task<int> SelectOrder(int expertId,int orderId, int suggestedPrice, CancellationToken cancellationToken)
         {
-            await _orderService.SelectOrder(expertId, orderId, cancellationToken);
-            await _orderProposalService.AcceptOrder(expertId, orderId, suggestedPrice,cancellationToken);
-           var bidId= await _bidService.Add(expertId, orderId,suggestedPrice,cancellationToken);
+            if (suggestedPrice <= 0)
+                throw new Exception("Invalid suggested price.");
+
+            var order = await _orderService.Get(orderId, cancellationToken);
+
+            if (order == null)
+                throw new Exception("Order does not exist.");
+
+            if (order.OrderStatus != OrderStatusEnum.WaitingForProposals ||order.ExpertId != null)
+            {
+                throw new Exception("This order is no longer open.");
+            }
+            // بررسی خدمات موردعلاقه متخصص
+
+            var favoriteServices = await _expertFavoriteServiceService.GetServices(expertId, cancellationToken);
+
+            if (!favoriteServices.Any(x => x.Id == order.ServiceId))
+                throw new Exception("This service is not in your favorites.");
+            // بررسی ثبت پیشنهاد قبلی متخصص
+
+            var existingBids = await _bidService.GetAllByOrderId(orderId, cancellationToken);
+
+            if (existingBids.Any(x =>x.ExpertId == expertId && x.ProposalStatus != ProposalStatusEnum.Withdrawn))
+            {
+                throw new Exception("You have already submitted a bid.");
+            }
+
+            // ثبت پیشنهاد
+            var bidId = await _bidService.Add( expertId,orderId,suggestedPrice,cancellationToken);
+
             return bidId;
         }
     }
-}
+    }

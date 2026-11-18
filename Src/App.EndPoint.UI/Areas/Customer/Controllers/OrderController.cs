@@ -1,5 +1,6 @@
 ﻿using App.Domain.Core.Order.Contracts.AppServices;
 using App.Domain.Core.Order.Enities;
+using App.Domain.Core.Order.Enums;
 using App.Domain.Core.Service.Contracts.AppServices;
 using App.Domain.Core.User.Contracts.AppServices;
 using App.Domain.Core.User.Entities;
@@ -50,14 +51,17 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var customer = _customerAppService.Get(userId, cancellationToken);
+            var customer = await _customerAppService.Get(userId, cancellationToken);
+            if (customer == null)
+                return Forbid();
             var customerId = customer.Id;
             var order = await _orderAppService.GetAllForCustomer(customerId, cancellationToken);
             var orderList = new List<OrderOutPutCustomeViewModel>();
             foreach (var item in order)
             {
-                var orderProposal = await _orderProposalAppService.GetByOrderId(item.Id, cancellationToken);
-                var expert = await _expertAppService.GetByExpertId(item.ExpertId, cancellationToken);
+                var bids = await _bidAppService.GetAllByOrderId( item.Id, cancellationToken);
+                var acceptedBid = bids.FirstOrDefault( x => x.ProposalStatus == ProposalStatusEnum.Accepted);
+                var expert = acceptedBid == null? null: await _expertAppService.Get( acceptedBid.ExpertId, cancellationToken);
                 var orderViewModel = new OrderOutPutCustomeViewModel()
                 {
                     CustomerId = customerId,
@@ -66,13 +70,16 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
                     BasePrice = item.BasePrice,
                     Discription = item.Discription,
                     CreatedAt = item.CreatedAt,
-                    DurationTime = orderProposal?.DurationTime,
                     PrefferedDateTime = item.PrefferedDateTime,
-                    StatrtedDateTime = orderProposal.StatrtedDateTime,
-                    ServiceId = item.ServiceId,
-                    SuggestedPrice = orderProposal.SuggestedPrice,
-                    ExpertUserName = expert.UserName,
-                    ProposalStatus = orderProposal.ProposalStatus,
+
+                    SuggestedPrice = acceptedBid?.SuggestedPrice ?? 0,
+
+                    ExpertUserName = expert?.UserName,
+
+                    ProposalStatus = acceptedBid?.ProposalStatus ?? ProposalStatusEnum.Pending,
+
+                    DurationTime = null,
+                    StatrtedDateTime = default
                 };
                 orderList.Add(orderViewModel);
             }
@@ -108,7 +115,7 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         {
             var model = new OrderCustomerViewModel();
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var customer = _customerAppService.Get(userId, cancellationToken);
+            var customer = await _customerAppService.Get(userId, cancellationToken);
             model.CustomerId = customer.Id;
             var services = (await _serviceAppService.GetAll(cancellationToken)).Select(x => new SelectListItem
             {
@@ -119,8 +126,10 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
             return View(model);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(OrderCustomerViewModel model, CancellationToken cancellationToken)
         {
+
 
             if (!ModelState.IsValid)
             {
@@ -154,8 +163,13 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
             }
             else
             {
-                model.CustomerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                var result = await _orderAppService.Set(model.CustomerId, model.Discription, model.PrefferedDateTime, model.ServiceId, cancellationToken);
+                var userId = int.Parse( User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var customer = await _customerAppService.Get( userId, cancellationToken);
+                if (customer == null)
+                    return Forbid();
+
+              
+                var result = await _orderAppService.Set(customer.Id, model.Discription, model.PrefferedDateTime, model.ServiceId, cancellationToken);
                 TempData["SuccessMessage"] = $"سفارش شما با شناسه {result} با موفقیت ثبت شد.";
 
                 return RedirectToAction(nameof(Index));
@@ -166,6 +180,18 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> Bids(int orderId, CancellationToken cancellationToken)
         {
+            var userId = int.Parse( User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var customer = await _customerAppService.Get( userId, cancellationToken);
+
+            if (customer == null)
+                return Forbid();
+
+            var order = await _orderAppService.GetForCustomer(customer.Id, orderId, cancellationToken);
+
+            if (order == null)
+                return NotFound();
+
             var bidViewModel = new List<BidViewModel>();
             var bids = await _bidAppService.GetAllByOrderId(orderId, cancellationToken);
             foreach (var bid in bids)
@@ -190,10 +216,11 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
             return View(bidViewModel);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SelectBid(int bidId, CancellationToken cancellationToken)
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var customer = _customerAppService.Get(userId, cancellationToken);
+            var customer =await _customerAppService.Get(userId, cancellationToken);
             var customerId = customer.Id;
             await _orderAppService.SelectBid(customerId, bidId, cancellationToken);
             return RedirectToAction("Index");
@@ -237,12 +264,13 @@ namespace App.EndPoint.UI.Areas.Customer.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddComment(CommentInPutViewModel model, CancellationToken cancellationToken)
         {
             if (ModelState.IsValid)
             {
                 var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                var customer = _customerAppService.Get(userId, cancellationToken);
+                var customer = await _customerAppService.Get(userId, cancellationToken);
                 var customerId = customer.Id;
                 await _commentAppService.Add(customerId, model.OrderId, model.Discription, cancellationToken);
                 return LocalRedirect("~/");

@@ -23,15 +23,17 @@ public class BidCommandRepository:IBidCommandRepository
         bid.SuggestedPrice= bidDto.SuggestedPrice;
         bid.CreatedAt=DateTime.Now;
         bid.IsDeleted = false;
+        bid.ExpertId = bidDto.ExpertId;
 
-        await _appDbContext.AddAsync(bid);
+        await _appDbContext.AddAsync(bid,cancellationToken);
         await _appDbContext.SaveChangesAsync(cancellationToken);
         return bid.Id;
     }
 
     public async Task Update(BidDto bidDto, CancellationToken cancellationToken)
     {
-        var bid = await _appDbContext.Bids.SingleOrDefaultAsync(x => x.Id == bidDto.Id);
+        var bid = await _appDbContext.Bids.SingleOrDefaultAsync(x => x.Id == bidDto.Id && !x.IsDeleted,
+        cancellationToken);
 
         if (bid == null)
         {
@@ -51,10 +53,10 @@ public class BidCommandRepository:IBidCommandRepository
   
    public async Task Delete(int id, CancellationToken cancellationToken)
     {
-        var bid = await _appDbContext.Bids.SingleOrDefaultAsync(x => x.Id ==id);
+        var bid = await _appDbContext.Bids.SingleOrDefaultAsync(x => x.Id ==id && !x.IsDeleted,cancellationToken);
         if (bid == null)
         {
-            throw new Exception($" There is no bid with Id={id}");
+            throw new Exception($"Bid with Id={id} does not exist.");
         }
         else
         {

@@ -47,7 +47,7 @@ public class BidQueryRepository:IBidQueryRepository
         if (!string.IsNullOrWhiteSpace(keyWord))
         {
 
-            var bids = await _appDbContext.Bids.Where(x => x.ProposalStatus.ToString().Contains(keyWord)).ToListAsync(cancellationToken);
+            var bids = await _appDbContext.Bids.Where(x => !x.IsDeleted && x.ProposalStatus.ToString().Contains(keyWord)).ToListAsync(cancellationToken);
             bidList = bids;
 
         }

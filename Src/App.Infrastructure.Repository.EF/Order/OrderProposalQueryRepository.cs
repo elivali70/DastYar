@@ -18,7 +18,7 @@ public class OrderProposalQueryRepository : IOrderProposalQueryRepository
     {
         var orderProposals = await _appDbContext.OredeProposals.Where(x => !x.IsDeleted).Select(s => new OrderProposalDto()
         {
-
+            Id = s.Id,
             ProposalStatus = s.ProposalStatus,
             SuggestedPrice = s.SuggestedPrice,
             OrderId = s.OrderId,
@@ -34,7 +34,7 @@ public class OrderProposalQueryRepository : IOrderProposalQueryRepository
     {
         var orderProposal = await _appDbContext.OredeProposals.Where(x => !x.IsDeleted && x.Id==id).Select(s => new OrderProposalDto()
         {
-
+            Id = s.Id,
             ProposalStatus = s.ProposalStatus,
             SuggestedPrice = s.SuggestedPrice,
             OrderId = s.OrderId,
@@ -50,7 +50,7 @@ public class OrderProposalQueryRepository : IOrderProposalQueryRepository
     {
         var orderProposal = await _appDbContext.OredeProposals.Where(x => !x.IsDeleted && x.OrderId == orderId).Select(s => new OrderProposalDto()
         {
-
+            Id=s.Id,
             ProposalStatus = s.ProposalStatus,
             SuggestedPrice = s.SuggestedPrice,
             OrderId = s.OrderId,

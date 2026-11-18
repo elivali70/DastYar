@@ -135,8 +135,8 @@ public class OrderQueryRepository : IOrderQueryRepository
 
     public async Task<List<OpenOrderOutPutDto>> GetOpenOrders(int expertId, int serviceId, CancellationToken cancellationToken)
     {
-        var oreders = await _appDbContext.Orders.Where(x => !x.IsDeleted && x.ExpertId == expertId &&
-        x.OrderStatus == OrderStatusEnum.WaitingForSpecialistSelection && x.ServiceId==serviceId).Select(s => new OpenOrderOutPutDto()
+        var oreders = await _appDbContext.Orders.Where(x => !x.IsDeleted && x.ExpertId == null &&
+        x.OrderStatus == OrderStatusEnum.WaitingForProposals && x.ServiceId==serviceId).Select(s => new OpenOrderOutPutDto()
         {
             OrderId = s.Id,
             ServiceName = s.Service.Name,
